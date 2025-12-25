@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-12-25T20:10:46.833725",
+  "timestamp": "2025-12-25T20:29:17.068462",
   "summary": {
-    "tests_run": 48,
-    "tests_passed": 48,
-    "success_rate": "100.0%"
+    "tests_run": 65,
+    "tests_passed": 53,
+    "success_rate": "81.5%"
   },
   "detailed_results": [
     {
@@ -40,6 +40,34 @@
       "details": "",
       "expected_status": 200,
       "actual_status": 200
+    },
+    {
+      "test": "Get Site Content",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Projects Page Stats Fields Present",
+      "success": false,
+      "details": "Missing fields: ['projects_page_badge', 'projects_page_title', 'projects_page_title_gradient', 'projects_page_subtitle', 'projects_stat1_value', 'projects_stat1_label', 'projects_stat2_value', 'projects_stat2_label', 'projects_stat3_value', 'projects_stat3_label', 'projects_stat4_value', 'projects_stat4_label']",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Get Site Content",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Timeline Fields Present",
+      "success": false,
+      "details": "Missing fields: ['timeline_year1', 'timeline_title1', 'timeline_desc1', 'timeline_year2', 'timeline_title2', 'timeline_desc2', 'timeline_year3', 'timeline_title3', 'timeline_desc3', 'timeline_year4', 'timeline_title4', 'timeline_desc4']",
+      "expected_status": null,
+      "actual_status": null
     },
     {
       "test": "Get Site Content",
@@ -318,6 +346,130 @@
       "test": "Form Label app_portfolio_label Updated",
       "success": true,
       "details": "",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Create Test Application",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Update Application Status to Hired",
+      "success": false,
+      "details": [
+        {
+          "type": "missing",
+          "loc": [
+            "query",
+            "status"
+          ],
+          "msg": "Field required",
+          "input": null,
+          "url": "https://errors.pydantic.dev/2.12/v/missing"
+        }
+      ],
+      "expected_status": 200,
+      "actual_status": 422
+    },
+    {
+      "test": "Update Application Status to Rejected",
+      "success": false,
+      "details": [
+        {
+          "type": "missing",
+          "loc": [
+            "query",
+            "status"
+          ],
+          "msg": "Field required",
+          "input": null,
+          "url": "https://errors.pydantic.dev/2.12/v/missing"
+        }
+      ],
+      "expected_status": 200,
+      "actual_status": 422
+    },
+    {
+      "test": "Application Status Updated to Rejected",
+      "success": false,
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Update Application Status to Pending",
+      "success": false,
+      "details": [
+        {
+          "type": "missing",
+          "loc": [
+            "query",
+            "status"
+          ],
+          "msg": "Field required",
+          "input": null,
+          "url": "https://errors.pydantic.dev/2.12/v/missing"
+        }
+      ],
+      "expected_status": 200,
+      "actual_status": 422
+    },
+    {
+      "test": "Application Status Updated to Pending",
+      "success": false,
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Get Job Applications (Admin)",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Admin Applications Access",
+      "success": true,
+      "details": "Found 8 applications",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Application Field instagram_id Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Application Field youtube_link1 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Application Field youtube_link2 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Application Field youtube_link3 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Application Field cv_filename Present",
+      "success": false,
+      "details": "Field missing in application data",
       "expected_status": null,
       "actual_status": null
     },
