@@ -513,6 +513,26 @@ async def get_upload(filename: str):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(filepath)
 
+@api_router.post("/upload/cv")
+async def upload_cv(file: UploadFile = File(...)):
+    """Upload CV/Resume file (PDF only, public endpoint for job applications)"""
+    allowed_types = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
+    if not file.content_type or file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="File must be a PDF or Word document")
+    
+    content = await file.read()
+    if len(content) > 10 * 1024 * 1024:  # 10MB limit for CVs
+        raise HTTPException(status_code=400, detail="File size must be less than 10MB")
+    
+    ext = file.filename.split(".")[-1] if "." in file.filename else "pdf"
+    filename = f"cv_{uuid.uuid4()}.{ext}"
+    filepath = UPLOAD_DIR / filename
+    
+    with open(filepath, "wb") as f:
+        f.write(content)
+    
+    return {"url": f"/api/uploads/{filename}", "filename": filename, "original_name": file.filename}
+
 # =========================
 # USER AUTH
 # =========================
