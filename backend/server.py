@@ -437,30 +437,77 @@ async def get_me(current_user: dict = Depends(get_current_user)):
 
 @api_router.post("/admin/request-otp")
 async def request_admin_otp(data: AdminOTPRequest):
+    """Request OTP for admin registration. 
+    For super admin email: OTP goes directly to them.
+    For other emails: OTP goes to super admin for approval."""
+    
     existing_admin = await db.admins.find_one({}, {"_id": 0})
     if not existing_admin and data.email != SUPER_ADMIN_EMAIL:
         raise HTTPException(status_code=403, detail="First admin must be the super admin email")
     
+    # Check if admin already exists
+    existing = await db.admins.find_one({"email": data.email}, {"_id": 0})
+    if existing:
+        raise HTTPException(status_code=400, detail="This email is already registered as an admin")
+    
     otp = generate_otp()
-    expires = datetime.now(timezone.utc) + timedelta(minutes=10)
+    expires = datetime.now(timezone.utc) + timedelta(minutes=30)  # Longer expiry for approval
     
-    await db.otp_codes.delete_many({"email": data.email})
-    await db.otp_codes.insert_one({"email": data.email, "otp": otp, "expires": expires.isoformat()})
+    await db.otp_codes.delete_many({"email": data.email, "type": "admin_registration"})
+    await db.otp_codes.insert_one({
+        "email": data.email, 
+        "otp": otp, 
+        "expires": expires.isoformat(),
+        "type": "admin_registration"
+    })
     
-    html = f"""
-    <div style="font-family: sans-serif; padding: 30px; background: #0a1a1f; color: white; border-radius: 16px;">
-        <h2 style="color: #00d4d4;">Admin Verification OTP</h2>
-        <p>Your verification code is:</p>
-        <h1 style="color: #f97316; letter-spacing: 10px; font-size: 40px;">{otp}</h1>
-        <p style="color: rgba(255,255,255,0.6);">This code expires in 10 minutes.</p>
-    </div>
-    """
-    await send_email(data.email, "Hogwarts Music Studio - Admin OTP", html)
-    return {"message": "OTP sent to email"}
+    if data.email == SUPER_ADMIN_EMAIL:
+        # Super admin gets OTP directly
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a1a1f 0%, #0d2229 100%); color: white; border-radius: 16px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #00d4d4 0%, #14b8a6 100%); padding: 30px; text-align: center;">
+                <h1 style="margin: 0; color: black; font-size: 28px;">Admin Registration</h1>
+            </div>
+            <div style="padding: 30px; text-align: center;">
+                <p style="color: rgba(255,255,255,0.8); font-size: 16px;">Your verification code to register as Super Admin:</p>
+                <h1 style="color: #00d4d4; letter-spacing: 10px; font-size: 48px; margin: 20px 0;">{otp}</h1>
+                <p style="color: rgba(255,255,255,0.5); font-size: 14px;">This code expires in 30 minutes.</p>
+            </div>
+        </div>
+        """
+        await send_email(data.email, "Hogwarts Music Studio - Admin OTP", html)
+        return {"message": "OTP sent to your email"}
+    else:
+        # For other admins, send OTP to super admin for approval
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a1a1f 0%, #0d2229 100%); color: white; border-radius: 16px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%); padding: 30px; text-align: center;">
+                <h1 style="margin: 0; color: black; font-size: 28px;">New Admin Registration Request</h1>
+            </div>
+            <div style="padding: 30px;">
+                <p style="color: rgba(255,255,255,0.8); font-size: 16px;">Someone is requesting admin access:</p>
+                <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                    <p style="margin: 0; color: #f97316; font-size: 18px;"><strong>Email:</strong> {data.email}</p>
+                </div>
+                <p style="color: rgba(255,255,255,0.6);">To approve this registration, share this OTP with them:</p>
+                <h1 style="color: #f97316; letter-spacing: 10px; font-size: 48px; margin: 20px 0; text-align: center;">{otp}</h1>
+                <p style="color: rgba(255,255,255,0.5); font-size: 14px; text-align: center;">This code expires in 30 minutes.</p>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid #f97316;">
+                    <p style="margin: 0; color: rgba(255,255,255,0.6); font-size: 12px;">If you did not expect this request, you can ignore this email.</p>
+                </div>
+            </div>
+        </div>
+        """
+        await send_email(SUPER_ADMIN_EMAIL, f"Admin Registration Request - {data.email}", html)
+        logger.info(f"Admin registration OTP for {data.email} sent to super admin")
+        return {"message": "Registration request sent to super admin for approval. They will share the OTP with you."}
 
 @api_router.post("/admin/verify-otp")
 async def verify_admin_otp(data: AdminOTPVerify):
-    otp_doc = await db.otp_codes.find_one({"email": data.email, "otp": data.otp}, {"_id": 0})
+    otp_doc = await db.otp_codes.find_one({"email": data.email, "otp": data.otp, "type": "admin_registration"}, {"_id": 0})
+    if not otp_doc:
+        # Also check legacy format without type
+        otp_doc = await db.otp_codes.find_one({"email": data.email, "otp": data.otp}, {"_id": 0})
     if not otp_doc:
         raise HTTPException(status_code=400, detail="Invalid OTP")
     if datetime.fromisoformat(otp_doc["expires"]) < datetime.now(timezone.utc):
@@ -477,6 +524,7 @@ async def verify_admin_otp(data: AdminOTPVerify):
         "email": data.email,
         "password": hash_password(data.password),
         "access_level": "super" if is_super else "basic",  # Default to basic for non-super admins
+        "suspended": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.admins.insert_one(admin_doc)
@@ -490,6 +538,10 @@ async def admin_login(data: AdminLogin):
     admin = await db.admins.find_one({"email": data.email}, {"_id": 0})
     if not admin or not verify_password(data.password, admin["password"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    # Check if admin is suspended
+    if admin.get("suspended") and admin["email"] != SUPER_ADMIN_EMAIL:
+        raise HTTPException(status_code=403, detail="Your account has been suspended. Contact the super admin.")
     
     # Ensure super admin always has super access
     if admin["email"] == SUPER_ADMIN_EMAIL and admin.get("access_level") != "super":
