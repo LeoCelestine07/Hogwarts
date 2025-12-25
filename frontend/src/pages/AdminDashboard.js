@@ -1187,6 +1187,22 @@ const AdminManagement = () => {
     }
   };
 
+  const suspendAdmin = async (adminId, currentSuspended) => {
+    const action = currentSuspended ? 'unsuspend' : 'suspend';
+    if (!window.confirm(`Are you sure you want to ${action} this admin?`)) return;
+    
+    try {
+      await axios.put(`${API}/admin/${adminId}/suspend`, 
+        { suspended: !currentSuspended, reason: !currentSuspended ? 'Suspended by Super Admin' : null },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success(`Admin ${action}ed successfully`);
+      fetchAdmins();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || `Failed to ${action} admin`);
+    }
+  };
+
   const deleteAdmin = async (adminId) => {
     if (!window.confirm('Delete this admin?')) return;
     try {
