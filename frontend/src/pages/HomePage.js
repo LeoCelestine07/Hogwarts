@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Mic, Sliders, Music, Volume2, Disc, MicVocal, Zap } from 'lucide-react';
 import axios from 'axios';
+import { resolveImageUrl, handleImageError } from '../utils/imageUtils';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_audio-haven-21/artifacts/kjwts159_HOGWARTS%20%20white%20bg%20only%20logo%20.jpg";
