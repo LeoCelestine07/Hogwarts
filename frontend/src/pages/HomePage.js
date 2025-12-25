@@ -243,10 +243,10 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-xs uppercase tracking-[0.2em] text-orange-400 mb-4 block">Portfolio</span>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Featured Projects</h2>
+            <span className="text-xs uppercase tracking-[0.2em] text-orange-400 mb-4 block">{content?.projects_badge || 'Portfolio'}</span>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">{content?.projects_title || 'Featured Projects'}</h2>
             <p className="text-white/50 max-w-xl mx-auto">
-              A glimpse into our recent work across films, music, and multimedia productions.
+              {content?.projects_subtitle || 'A glimpse into our recent work across films, music, and multimedia productions.'}
             </p>
           </motion.div>
 
