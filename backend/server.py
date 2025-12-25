@@ -189,7 +189,15 @@ class SiteContentUpdate(BaseModel):
     hero_subtitle: Optional[str] = None
     hero_cta_text: Optional[str] = None
     hero_cta_secondary: Optional[str] = None
-    # Services Section
+    # Services Page
+    services_page_badge: Optional[str] = None
+    services_page_title: Optional[str] = None
+    services_page_title_gradient: Optional[str] = None
+    services_page_subtitle: Optional[str] = None
+    services_cta_title: Optional[str] = None
+    services_cta_subtitle: Optional[str] = None
+    services_cta_button: Optional[str] = None
+    # Services Section (Home)
     services_badge: Optional[str] = None
     services_title: Optional[str] = None
     services_subtitle: Optional[str] = None
@@ -199,11 +207,32 @@ class SiteContentUpdate(BaseModel):
     projects_title: Optional[str] = None
     projects_subtitle: Optional[str] = None
     projects_cta: Optional[str] = None
-    # About Section
+    # About Page
+    about_page_badge: Optional[str] = None
+    about_page_title: Optional[str] = None
+    about_page_title_gradient: Optional[str] = None
+    about_page_description: Optional[str] = None
+    about_philosophy_title: Optional[str] = None
+    about_philosophy_text: Optional[str] = None
+    about_feature1: Optional[str] = None
+    about_feature2: Optional[str] = None
+    about_feature3: Optional[str] = None
+    about_values_badge: Optional[str] = None
+    about_values_title: Optional[str] = None
+    about_journey_badge: Optional[str] = None
+    about_journey_title: Optional[str] = None
+    about_cta_title: Optional[str] = None
+    about_cta_title_gradient: Optional[str] = None
+    about_cta_subtitle: Optional[str] = None
+    about_cta_button: Optional[str] = None
+    # About Section (legacy/home)
     about_badge: Optional[str] = None
     about_title: Optional[str] = None
     about_subtitle: Optional[str] = None
     about_description: Optional[str] = None
+    # Founder Section
+    founder_badge: Optional[str] = None
+    founder_section_title: Optional[str] = None
     founder_name: Optional[str] = None
     founder_title: Optional[str] = None
     founder_bio: Optional[str] = None
