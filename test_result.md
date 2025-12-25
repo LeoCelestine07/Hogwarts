@@ -362,19 +362,18 @@ frontend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 4
+  test_sequence: 5
   run_ui: true
 
 test_plan:
   current_focus:
-    - "Admin Dashboard functionality"
-    - "Image uploads and display"
-    - "Theme management"
-    - "Admin RBAC"
+    - "Content Management - Careers fields"
+    - "Scroll to top on navigation"
+    - "Applications tab in admin"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
-    message: "Fixed major issues: 1) Image display now uses resolveImageUrl() with proper fallbacks, 2) ThemeContext created for dynamic theme application, 3) Admin access_level dropdown fixed to use correct API payload, 4) SiteSettings now refreshes theme after saving. Admin credentials: leocelestine.s@gmail.com / Admin123!"
+    message: "Implemented: 1) ScrollToTop component for automatic scroll on navigation, 2) Added careers_* and applications_* fields to backend SiteContentUpdate model, 3) Added Careers Page and Applications Tab sections in ContentManagement admin panel, 4) Updated HomePage to use dynamic content for badges, titles, subtitles. Admin credentials: leocelestine.s@gmail.com / Admin123!"
