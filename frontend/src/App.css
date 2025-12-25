@@ -42,6 +42,16 @@
   -webkit-line-clamp: 3;
 }
 
+/* Hide scrollbar for mobile nav */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+
 /* Calendar dark theme override - cyan/teal theme */
 .rdp {
   --rdp-cell-size: 40px;
