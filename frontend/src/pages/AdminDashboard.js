@@ -2324,18 +2324,18 @@ const AdminDashboard = () => {
         </aside>
 
         {/* Mobile Nav */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 px-4 py-2 z-50">
-          <div className="flex justify-around">
-            {navItems.slice(0, 4).map((item) => (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/10 px-2 py-2 z-50">
+          <div className="flex overflow-x-auto gap-1 pb-1 scrollbar-hide">
+            {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl ${
-                  location.pathname === item.path ? 'text-cyan-400' : 'text-white/50'
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-xl flex-shrink-0 min-w-[60px] ${
+                  location.pathname === item.path ? 'text-cyan-400 bg-cyan-500/10' : 'text-white/50'
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                <span className="text-xs">{item.label}</span>
+                <span className="text-[10px] whitespace-nowrap">{item.label}</span>
               </Link>
             ))}
           </div>
