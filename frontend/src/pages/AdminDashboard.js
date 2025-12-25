@@ -1362,7 +1362,9 @@ const ContentManagement = () => {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [logoUploading, setLogoUploading] = useState(false);
   const { token } = useAuth();
+  const logoInputRef = useRef(null);
 
   useEffect(() => {
     fetchContent();
@@ -1376,6 +1378,35 @@ const ContentManagement = () => {
       toast.error('Failed to fetch content');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setContent(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    setLogoUploading(true);
+    try {
+      const response = await axios.post(`${API}/upload/image`, formData, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      const imageUrl = `${process.env.REACT_APP_BACKEND_URL}${response.data.url}`;
+      setContent(prev => ({ ...prev, logo_url: imageUrl }));
+      toast.success('Logo uploaded!');
+    } catch (error) {
+      toast.error('Failed to upload logo');
+    } finally {
+      setLogoUploading(false);
     }
   };
 
@@ -1393,7 +1424,7 @@ const ContentManagement = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !content) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
@@ -1401,23 +1432,264 @@ const ContentManagement = () => {
     );
   }
 
-  const ContentSection = ({ title, children }) => (
-    <div className="glass rounded-xl p-6 border border-white/10">
-      <h3 className="font-bold text-lg mb-4 text-cyan-400">{title}</h3>
-      <div className="space-y-4">
-        {children}
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Content Management</h1>
+          <p className="text-white/50 text-sm mt-1">Edit all text content on the website</p>
+        </div>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-semibold hover:scale-105 transition-transform disabled:opacity-50"
+        >
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          Save All Changes
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Logo & Branding */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">Logo & Branding</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Logo</label>
+              <div className="flex items-center gap-4">
+                {content.logo_url && (
+                  <img 
+                    src={content.logo_url} 
+                    alt="Logo" 
+                    className="w-16 h-16 rounded-lg object-contain bg-white"
+                  />
+                )}
+                <input
+                  type="file"
+                  ref={logoInputRef}
+                  onChange={handleLogoUpload}
+                  accept="image/*"
+                  className="hidden"
+                />
+                <button
+                  onClick={() => logoInputRef.current?.click()}
+                  disabled={logoUploading}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg glass border border-white/20 hover:bg-white/10"
+                >
+                  {logoUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  Upload Logo
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Logo Alt Text</label>
+              <input
+                type="text"
+                value={content.logo_alt || ''}
+                onChange={(e) => handleInputChange('logo_alt', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Labels */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">Navigation Labels</h3>
+          <div className="space-y-4">
+            {[
+              { label: 'Home', field: 'nav_home' },
+              { label: 'Services', field: 'nav_services' },
+              { label: 'Projects', field: 'nav_projects' },
+              { label: 'About', field: 'nav_about' },
+              { label: 'Book Session', field: 'nav_booking' }
+            ].map(({ label, field }) => (
+              <div key={field}>
+                <label className="block text-sm text-white/60 mb-2">{label}</label>
+                <input
+                  type="text"
+                  value={content[field] || ''}
+                  onChange={(e) => handleInputChange(field, e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hero Section */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">Hero Section</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title</label>
+              <input
+                type="text"
+                value={content.hero_title || ''}
+                onChange={(e) => handleInputChange('hero_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Gradient Title</label>
+              <input
+                type="text"
+                value={content.hero_title_gradient || ''}
+                onChange={(e) => handleInputChange('hero_title_gradient', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Subtitle</label>
+              <textarea
+                value={content.hero_subtitle || ''}
+                onChange={(e) => handleInputChange('hero_subtitle', e.target.value)}
+                rows={3}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Button Text</label>
+              <input
+                type="text"
+                value={content.hero_cta_text || ''}
+                onChange={(e) => handleInputChange('hero_cta_text', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">About Section</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Section Title</label>
+              <input
+                type="text"
+                value={content.about_title || ''}
+                onChange={(e) => handleInputChange('about_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Description</label>
+              <textarea
+                value={content.about_description || ''}
+                onChange={(e) => handleInputChange('about_description', e.target.value)}
+                rows={3}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Founder Info */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-orange-400">Founder Info</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Founder Name</label>
+              <input
+                type="text"
+                value={content.founder_name || ''}
+                onChange={(e) => handleInputChange('founder_name', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Founder Title</label>
+              <input
+                type="text"
+                value={content.founder_title || ''}
+                onChange={(e) => handleInputChange('founder_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Founder Bio</label>
+              <textarea
+                value={content.founder_bio || ''}
+                onChange={(e) => handleInputChange('founder_bio', e.target.value)}
+                rows={3}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">IMDB URL</label>
+              <input
+                type="url"
+                value={content.founder_imdb_url || ''}
+                onChange={(e) => handleInputChange('founder_imdb_url', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="glass rounded-xl p-6 border border-white/10">
+          <h3 className="font-bold text-lg mb-4 text-teal-400">Call to Action Section</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Title</label>
+              <input
+                type="text"
+                value={content.cta_title || ''}
+                onChange={(e) => handleInputChange('cta_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Subtitle</label>
+              <input
+                type="text"
+                value={content.cta_subtitle || ''}
+                onChange={(e) => handleInputChange('cta_subtitle', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Button Text</label>
+              <input
+                type="text"
+                value={content.cta_button_text || ''}
+                onChange={(e) => handleInputChange('cta_button_text', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
+          <h3 className="font-bold text-lg mb-4 text-purple-400">Footer</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Footer Tagline</label>
+              <textarea
+                value={content.footer_tagline || ''}
+                onChange={(e) => handleInputChange('footer_tagline', e.target.value)}
+                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Copyright Text</label>
+              <input
+                type="text"
+                value={content.copyright_text || ''}
+                onChange={(e) => handleInputChange('copyright_text', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-
-  const InputField = ({ label, field, textarea = false }) => (
-    <div>
-      <label className="block text-sm text-white/60 mb-2">{label}</label>
-      {textarea ? (
-        <textarea
-          value={content?.[field] || ''}
-          onChange={(e) => setContent({ ...content, [field]: e.target.value })}
-          rows={3}
+};
           className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
         />
       ) : (
