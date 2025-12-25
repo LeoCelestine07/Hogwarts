@@ -15,8 +15,6 @@ const Navbar = () => {
   const [content, setContent] = useState(null);
   const location = useLocation();
   const { user, isAdmin, logout } = useAuth();
-  const lastScrollY = useRef(0);
-  const scrollTimeout = useRef(null);
 
   useEffect(() => {
     fetchContent();
