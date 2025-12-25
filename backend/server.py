@@ -1386,12 +1386,80 @@ async def update_application_status(app_id: str, status: str, admin: dict = Depe
     if status not in ["pending", "reviewed", "contacted", "rejected", "hired"]:
         raise HTTPException(status_code=400, detail="Invalid status")
     
+    # Get the application first
+    application = await db.applications.find_one({"id": app_id}, {"_id": 0})
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
     result = await db.applications.update_one(
         {"id": app_id},
         {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Application not found")
+    
+    # Send acceptance email if status is "hired"
+    if status == "hired":
+        try:
+            applicant_name = application.get("name", "Applicant")
+            applicant_email = application.get("email")
+            position = application.get("position_type", "team member")
+            
+            if applicant_email:
+                # Get site content for branding
+                site_content = await db.site_content.find_one({"id": "content"}, {"_id": 0})
+                studio_name = site_content.get("navbar_brand", "Hogwarts Music Studio") if site_content else "Hogwarts Music Studio"
+                
+                acceptance_html = f"""
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a1a1f 0%, #0f2a32 100%); border-radius: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #00d4d4; margin: 0; font-size: 28px;">🎉 Welcome to {studio_name}!</h1>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 30px; border: 1px solid rgba(0,212,212,0.2);">
+            <p style="color: #ffffff; font-size: 18px; margin-bottom: 20px;">
+                Dear <strong style="color: #00d4d4;">{applicant_name}</strong>,
+            </p>
+            
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 20px;">
+                We are thrilled to inform you that your application for the <strong style="color: #f97316;">{position}</strong> position has been <strong style="color: #00d4d4;">ACCEPTED!</strong>
+            </p>
+            
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 20px;">
+                After careful consideration of your qualifications and experience, we believe you would be an excellent addition to our team. Your passion for audio and creative excellence aligns perfectly with our studio's vision.
+            </p>
+            
+            <div style="background: linear-gradient(135deg, rgba(0,212,212,0.1) 0%, rgba(20,184,166,0.1) 100%); border-radius: 12px; padding: 20px; margin: 25px 0; border-left: 4px solid #00d4d4;">
+                <h3 style="color: #00d4d4; margin: 0 0 10px 0;">🎯 Next Steps</h3>
+                <p style="color: rgba(255,255,255,0.8); margin: 0; line-height: 1.6;">
+                    Our team will contact you shortly with further details about onboarding, your role, and what to expect on your journey with us.
+                </p>
+            </div>
+            
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 20px;">
+                We are excited to have you join our family of audio professionals. Together, we'll create amazing soundscapes and bring creative visions to life!
+            </p>
+            
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 30px;">
+                With warm regards,<br>
+                <strong style="color: #ffffff;">The {studio_name} Team</strong>
+            </p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin: 0;">
+                🎬 Crafting Sonic Excellence | {studio_name}
+            </p>
+        </div>
+    </div>
+                """
+                
+                await send_email(
+                    to_email=applicant_email,
+                    subject=f"🎉 Welcome to {studio_name} - Your Application Has Been Accepted!",
+                    html_content=acceptance_html
+                )
+        except Exception as e:
+            print(f"Failed to send acceptance email: {e}")
+            # Don't fail the status update if email fails
     
     return {"message": f"Application status updated to {status}"}
 
