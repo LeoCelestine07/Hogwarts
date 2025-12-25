@@ -2223,6 +2223,7 @@ const AdminDashboard = () => {
             )}
             {isSuperAdmin && (
               <>
+                <Route path="applications" element={<ApplicationsManagement />} />
                 <Route path="content" element={<ContentManagement />} />
                 <Route path="contact" element={<ContactManagement />} />
                 <Route path="settings" element={<SiteSettings />} />
