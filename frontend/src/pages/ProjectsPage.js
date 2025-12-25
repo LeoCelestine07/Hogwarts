@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, ExternalLink, Zap } from 'lucide-react';
 import axios from 'axios';
+import { resolveImageUrl, handleImageError } from '../utils/imageUtils';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
