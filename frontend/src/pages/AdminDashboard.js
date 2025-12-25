@@ -1561,6 +1561,259 @@ const ContentManagement = () => {
           </div>
         </div>
 
+        {/* Services Page */}
+        <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
+          <h3 className="font-bold text-lg mb-4 text-teal-400">Services Page</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Badge</label>
+              <input
+                type="text"
+                value={content.services_page_badge || ''}
+                onChange={(e) => handleInputChange('services_page_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Our Services"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Title</label>
+              <input
+                type="text"
+                value={content.services_page_title || ''}
+                onChange={(e) => handleInputChange('services_page_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Professional Audio"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title Gradient (2nd line)</label>
+              <input
+                type="text"
+                value={content.services_page_title_gradient || ''}
+                onChange={(e) => handleInputChange('services_page_title_gradient', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Solutions"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/60 mb-2">Page Subtitle</label>
+              <textarea
+                value={content.services_page_subtitle || ''}
+                onChange={(e) => handleInputChange('services_page_subtitle', e.target.value)}
+                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+                placeholder="From dubbing to mastering..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Title</label>
+              <input
+                type="text"
+                value={content.services_cta_title || ''}
+                onChange={(e) => handleInputChange('services_cta_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Not Sure Which Service?"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Subtitle</label>
+              <input
+                type="text"
+                value={content.services_cta_subtitle || ''}
+                onChange={(e) => handleInputChange('services_cta_subtitle', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Let's discuss your project..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Button Text</label>
+              <input
+                type="text"
+                value={content.services_cta_button || ''}
+                onChange={(e) => handleInputChange('services_cta_button', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Get in Touch"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* About Page */}
+        <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">About Page</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Badge</label>
+              <input
+                type="text"
+                value={content.about_page_badge || ''}
+                onChange={(e) => handleInputChange('about_page_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="About Us"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Title</label>
+              <input
+                type="text"
+                value={content.about_page_title || ''}
+                onChange={(e) => handleInputChange('about_page_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Crafting Sound"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title Gradient (2nd line)</label>
+              <input
+                type="text"
+                value={content.about_page_title_gradient || ''}
+                onChange={(e) => handleInputChange('about_page_title_gradient', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Since 2018"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/60 mb-2">Page Description</label>
+              <textarea
+                value={content.about_page_description || ''}
+                onChange={(e) => handleInputChange('about_page_description', e.target.value)}
+                rows={3}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Philosophy Title</label>
+              <input
+                type="text"
+                value={content.about_philosophy_title || ''}
+                onChange={(e) => handleInputChange('about_philosophy_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Our Philosophy"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/60 mb-2">Philosophy Text</label>
+              <textarea
+                value={content.about_philosophy_text || ''}
+                onChange={(e) => handleInputChange('about_philosophy_text', e.target.value)}
+                rows={3}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+                placeholder="We believe that great sound is invisible..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Feature 1 (Bullet Point)</label>
+              <input
+                type="text"
+                value={content.about_feature1 || ''}
+                onChange={(e) => handleInputChange('about_feature1', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Industry-standard equipment"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Feature 2 (Bullet Point)</label>
+              <input
+                type="text"
+                value={content.about_feature2 || ''}
+                onChange={(e) => handleInputChange('about_feature2', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Fast turnaround times"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Feature 3 (Bullet Point)</label>
+              <input
+                type="text"
+                value={content.about_feature3 || ''}
+                onChange={(e) => handleInputChange('about_feature3', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Dedicated support team"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Values Badge</label>
+              <input
+                type="text"
+                value={content.about_values_badge || ''}
+                onChange={(e) => handleInputChange('about_values_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Our Values"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Values Title</label>
+              <input
+                type="text"
+                value={content.about_values_title || ''}
+                onChange={(e) => handleInputChange('about_values_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="What Drives Us"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Journey Badge</label>
+              <input
+                type="text"
+                value={content.about_journey_badge || ''}
+                onChange={(e) => handleInputChange('about_journey_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Our Journey"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Journey Title</label>
+              <input
+                type="text"
+                value={content.about_journey_title || ''}
+                onChange={(e) => handleInputChange('about_journey_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="The Story So Far"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Title</label>
+              <input
+                type="text"
+                value={content.about_cta_title || ''}
+                onChange={(e) => handleInputChange('about_cta_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Let's Create Something"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Title Gradient</label>
+              <input
+                type="text"
+                value={content.about_cta_title_gradient || ''}
+                onChange={(e) => handleInputChange('about_cta_title_gradient', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Extraordinary"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/60 mb-2">CTA Subtitle</label>
+              <input
+                type="text"
+                value={content.about_cta_subtitle || ''}
+                onChange={(e) => handleInputChange('about_cta_subtitle', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Ready to elevate your project..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">CTA Button Text</label>
+              <input
+                type="text"
+                value={content.about_cta_button || ''}
+                onChange={(e) => handleInputChange('about_cta_button', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Start a Project"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* About Section */}
         <div className="glass rounded-xl p-6 border border-white/10">
           <h3 className="font-bold text-lg mb-4 text-cyan-400">About Section</h3>
