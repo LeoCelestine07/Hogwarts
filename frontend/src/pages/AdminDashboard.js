@@ -1344,8 +1344,8 @@ const AdminDashboard = () => {
 
   if (!isAdmin) return null;
 
-  const isSuperAdmin = adminData?.is_super_admin || adminData?.email === 'leocelestine.s@gmail.com';
-  const hasFullAccess = isSuperAdmin || adminData?.has_full_access;
+  const isSuperAdmin = adminData?.is_super_admin || adminData?.email === 'leocelestine.s@gmail.com' || adminData?.access_level === 'super';
+  const hasFullAccess = isSuperAdmin || adminData?.access_level === 'full';
 
   // Navigation items based on access level
   const navItems = [
