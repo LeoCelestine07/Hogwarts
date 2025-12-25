@@ -42,15 +42,15 @@
   -webkit-line-clamp: 3;
 }
 
-/* Calendar dark theme override */
+/* Calendar dark theme override - cyan/teal theme */
 .rdp {
   --rdp-cell-size: 40px;
-  --rdp-accent-color: #00f0ff;
-  --rdp-background-color: rgba(0, 240, 255, 0.1);
+  --rdp-accent-color: #00d4d4;
+  --rdp-background-color: rgba(0, 212, 212, 0.1);
 }
 
 .rdp-day_selected {
-  background: linear-gradient(135deg, #00f0ff 0%, #bc13fe 100%) !important;
+  background: linear-gradient(135deg, #00d4d4 0%, #14b8a6 100%) !important;
   color: black !important;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .rdp-button:focus-visible {
-  outline: 2px solid #00f0ff;
+  outline: 2px solid #00d4d4;
   outline-offset: 2px;
 }
 
@@ -90,6 +90,42 @@
 
 /* Toaster custom */
 [data-sonner-toaster] {
-  --normal-bg: rgba(10, 10, 18, 0.95);
+  --normal-bg: rgba(13, 34, 41, 0.95);
   --normal-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Lightning bolt animation */
+@keyframes bolt-flash {
+  0%, 100% { 
+    filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.3));
+    opacity: 0.7;
+  }
+  50% { 
+    filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8));
+    opacity: 1;
+  }
+}
+
+.lightning-bolt {
+  animation: bolt-flash 3s ease-in-out infinite;
+}
+
+/* Orange accent cards */
+.orange-accent {
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+.orange-accent:hover {
+  border-color: rgba(249, 115, 22, 0.5);
+  box-shadow: 0 0 30px -10px rgba(249, 115, 22, 0.4);
+}
+
+/* Teal accent cards */
+.teal-accent {
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.teal-accent:hover {
+  border-color: rgba(20, 184, 166, 0.5);
+  box-shadow: 0 0 30px -10px rgba(20, 184, 166, 0.4);
 }
