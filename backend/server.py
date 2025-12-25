@@ -403,7 +403,9 @@ async def delete_project(project_id: str, admin: dict = Depends(get_current_admi
 @api_router.post("/bookings", response_model=dict)
 async def create_booking(booking: BookingCreate):
     booking_doc = BookingModel(**booking.model_dump()).model_dump()
-    await db.bookings.insert_one(booking_doc)
+    result = await db.bookings.insert_one(booking_doc)
+    # Get the inserted document without _id
+    inserted_booking = await db.bookings.find_one({"id": booking_doc["id"]}, {"_id": 0})
     
     # Send confirmation email to user
     user_html = f"""
