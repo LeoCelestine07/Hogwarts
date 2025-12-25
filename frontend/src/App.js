@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
@@ -23,6 +24,7 @@ function App() {
     <AuthProvider>
       <ThemeProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="min-h-screen bg-[#030305] relative">
           <Navbar />
           <main>
