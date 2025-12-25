@@ -1,0 +1,173 @@
+{
+  "timestamp": "2025-12-25T13:46:17.348240",
+  "total_tests": 33,
+  "passed_tests": 31,
+  "success_rate": 93.93939393939394,
+  "results": [
+    {
+      "test": "Root API",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Services",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Services Count (\u22656)",
+      "success": true,
+      "details": "Found 6 services"
+    },
+    {
+      "test": "Service: Dubbing",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Vocal Recording",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Mixing",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Mastering",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: SFX & Foley",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Music Production",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Dubbing Fixed Price",
+      "success": true,
+      "details": "\u20b9299/hr"
+    },
+    {
+      "test": "Get Projects",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Projects Count (\u22655)",
+      "success": true,
+      "details": "Found 5 projects"
+    },
+    {
+      "test": "Featured Projects (\u22655)",
+      "success": true,
+      "details": "Found 5 featured"
+    },
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "User Token Generated",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Skipped - using registration token"
+    },
+    {
+      "test": "Get Services",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Services Count (\u22656)",
+      "success": true,
+      "details": "Found 6 services"
+    },
+    {
+      "test": "Service: Dubbing",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Vocal Recording",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Mixing",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Mastering",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: SFX & Foley",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Service: Music Production",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Dubbing Fixed Price",
+      "success": true,
+      "details": "\u20b9299/hr"
+    },
+    {
+      "test": "Booking Creation",
+      "success": false,
+      "details": "Status: 520 (Expected 200) - Internal Server Error"
+    },
+    {
+      "test": "Booking Response Format",
+      "success": false,
+      "details": "Missing booking in response"
+    },
+    {
+      "test": "Admin OTP Request",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "AI Chat",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Chat Response Format",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Chat Response Content",
+      "success": true,
+      "details": "Response length: 676"
+    },
+    {
+      "test": "Get User Profile",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get User Bookings",
+      "success": true,
+      "details": "Status: 200"
+    }
+  ]
+}
