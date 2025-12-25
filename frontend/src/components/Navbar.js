@@ -23,43 +23,38 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
-      
-      setScrolled(currentScrollY > 20);
-      
-      // Hide navbar on fast scroll down, show on scroll up or slow scroll
-      if (scrollDiff > 10) {
-        if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-          // Scrolling down fast - hide
-          setVisible(false);
-        } else {
-          // Scrolling up - show
-          setVisible(true);
-        }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollDiff = currentScrollY - lastScrollY;
+          
+          setScrolled(currentScrollY > 20);
+          
+          // Hide on scroll down (past 100px), show on scroll up
+          if (scrollDiff > 5 && currentScrollY > 100) {
+            setVisible(false);
+          } else if (scrollDiff < -5) {
+            setVisible(true);
+          }
+          
+          // Always show at top
+          if (currentScrollY < 50) {
+            setVisible(true);
+          }
+          
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      
-      lastScrollY.current = currentScrollY;
-      
-      // Clear existing timeout
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-      
-      // Show navbar when scroll stops
-      scrollTimeout.current = setTimeout(() => {
-        setVisible(true);
-      }, 150);
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
