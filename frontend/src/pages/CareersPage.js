@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, GraduationCap, Mail, Phone, MapPin, FileText, Send, Loader2, CheckCircle, Zap } from 'lucide-react';
+import { Briefcase, GraduationCap, Mail, Phone, MapPin, FileText, Send, Loader2, CheckCircle, Zap, Instagram, Youtube, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -10,6 +10,9 @@ const CareersPage = () => {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [cvFile, setCvFile] = useState(null);
+  const [uploadingCv, setUploadingCv] = useState(false);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,7 +20,12 @@ const CareersPage = () => {
     city: '',
     position_type: 'intern',
     note: '',
-    portfolio_url: ''
+    portfolio_url: '',
+    instagram_id: '',
+    youtube_link1: '',
+    youtube_link2: '',
+    youtube_link3: '',
+    cv_filename: ''
   });
 
   useEffect(() => {
