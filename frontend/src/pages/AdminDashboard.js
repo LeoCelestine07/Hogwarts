@@ -1742,7 +1742,9 @@ const AdminDashboard = () => {
   // Add super admin items
   if (isSuperAdmin) {
     navItems.push(
-      { path: '/admin/settings', icon: Palette, label: 'Site Settings', access: 'super' },
+      { path: '/admin/content', icon: FileText, label: 'Content', access: 'super' },
+      { path: '/admin/contact', icon: Phone, label: 'Contact Info', access: 'super' },
+      { path: '/admin/settings', icon: Palette, label: 'Theme', access: 'super' },
       { path: '/admin/admins', icon: Users, label: 'Admin Team', access: 'super' },
     );
   }
