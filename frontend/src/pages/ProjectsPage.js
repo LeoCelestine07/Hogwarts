@@ -124,7 +124,7 @@ const ProjectsPage = () => {
                     </div>
                     
                     {/* Glass overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f] via-[#0a1a1f]/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f] via-[#0a1a1f]/40 to-transparent group-hover:opacity-90 transition-opacity" />
                     
                     {/* Work type badge */}
                     <div className="absolute top-6 left-6">
