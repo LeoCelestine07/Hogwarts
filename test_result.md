@@ -101,3 +101,171 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Build a full-stack, multi-page modern web application for Hogwarts Music Studio with admin dashboard that allows full website control including image uploads, theme management, and booking management"
+
+backend:
+  - task: "Image Upload API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Image upload endpoint /api/upload/image working. Returns proper URL. Static file serving at /api/uploads/{filename} working."
+
+  - task: "Admin RBAC (Role-Based Access Control)"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Super admin (leocelestine.s@gmail.com) has full access. Basic admins have view-only access. Access level stored in 'access_level' field."
+
+  - task: "Site Settings API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "GET /api/settings/site returns theme settings. PUT /api/settings/site updates theme (super admin only)."
+
+  - task: "Services CRUD"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Create, Read, Update, Delete services working with proper authorization."
+
+  - task: "Projects CRUD"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Create, Read, Update, Delete projects working with proper authorization."
+
+  - task: "Booking System with Email"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Booking creation sends confirmation email to user and notification to admin via Resend API."
+
+frontend:
+  - task: "Admin Dashboard - Services Management"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Services management showing all 6 services with images, edit/delete buttons, and add service functionality."
+
+  - task: "Admin Dashboard - Projects Management"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Projects management with image uploads, edit/delete functionality."
+
+  - task: "Admin Dashboard - Site Settings"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Site settings page showing background type, brand colors with color pickers, and save button. Changes should reflect on main site via ThemeContext."
+
+  - task: "Image Display with Fallbacks"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/utils/imageUtils.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created imageUtils.js with resolveImageUrl() and handleImageError() functions. All pages now properly handle broken images with fallbacks."
+
+  - task: "Dynamic Theme Application"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/context/ThemeContext.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "ThemeContext fetches settings from backend and applies CSS variables. refreshTheme() called after saving settings."
+
+  - task: "Admin Access Level Dropdown"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/AdminDashboard.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Admin Team page shows dropdown for basic/full access selection for non-super admins."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 4
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "Admin Dashboard functionality"
+    - "Image uploads and display"
+    - "Theme management"
+    - "Admin RBAC"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Fixed major issues: 1) Image display now uses resolveImageUrl() with proper fallbacks, 2) ThemeContext created for dynamic theme application, 3) Admin access_level dropdown fixed to use correct API payload, 4) SiteSettings now refreshes theme after saving. Admin credentials: leocelestine.s@gmail.com / Admin123!"
