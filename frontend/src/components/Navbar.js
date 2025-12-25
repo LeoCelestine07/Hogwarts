@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, User, LogOut } from 'lucide-react';
@@ -11,9 +11,12 @@ const DEFAULT_LOGO = "https://customer-assets.emergentagent.com/job_audio-haven-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [content, setContent] = useState(null);
   const location = useLocation();
   const { user, isAdmin, logout } = useAuth();
+  const lastScrollY = useRef(0);
+  const scrollTimeout = useRef(null);
 
   useEffect(() => {
     fetchContent();
@@ -21,10 +24,42 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      const scrollDiff = Math.abs(currentScrollY - lastScrollY.current);
+      
+      setScrolled(currentScrollY > 20);
+      
+      // Hide navbar on fast scroll down, show on scroll up or slow scroll
+      if (scrollDiff > 10) {
+        if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+          // Scrolling down fast - hide
+          setVisible(false);
+        } else {
+          // Scrolling up - show
+          setVisible(true);
+        }
+      }
+      
+      lastScrollY.current = currentScrollY;
+      
+      // Clear existing timeout
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+      
+      // Show navbar when scroll stops
+      scrollTimeout.current = setTimeout(() => {
+        setVisible(true);
+      }, 150);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -54,10 +89,13 @@ const Navbar = () => {
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-4xl transition-all duration-500 ${
-        scrolled ? 'top-4' : 'top-6'
+      animate={{ 
+        y: visible ? 0 : -150, 
+        opacity: visible ? 1 : 0 
+      }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      className={`fixed left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-4xl transition-all duration-300 ${
+        scrolled ? 'top-2 sm:top-4' : 'top-3 sm:top-6'
       }`}
     >
       <div
