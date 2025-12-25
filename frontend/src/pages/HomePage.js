@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, Mic, Sliders, Music, Volume2, Disc, MicVocal } from 'lucide-react';
+import { ArrowRight, Play, Mic, Sliders, Music, Volume2, Disc, MicVocal, Zap } from 'lucide-react';
 import axios from 'axios';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_audio-haven-21/artifacts/kjwts159_HOGWARTS%20%20white%20bg%20only%20logo%20.jpg";
 
 const iconMap = {
   'mic': Mic,
@@ -29,7 +30,7 @@ const HomePage = () => {
         axios.get(`${API}/services`),
         axios.get(`${API}/projects`)
       ]);
-      setServices(servicesRes.data.slice(0, 3));
+      setServices(servicesRes.data);
       setProjects(projectsRes.data.slice(0, 3));
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -40,28 +41,45 @@ const HomePage = () => {
     <div className="relative" data-testid="home-page">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background effects */}
-        <div className="absolute inset-0 bg-[#030305]">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 via-purple-900/10 to-cyan-900/10" />
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[128px]" />
+        {/* Background effects - Teal/Cyan theme */}
+        <div className="absolute inset-0 bg-[#0a1a1f]">
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-900/30 via-cyan-900/10 to-orange-900/10" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/15 rounded-full blur-[128px]" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[128px]" />
+          <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-orange-500/10 rounded-full blur-[100px]" />
         </div>
+
+        {/* Lightning bolt decorations */}
+        <motion.div
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 right-[15%] text-amber-400/60"
+        >
+          <Zap className="w-16 h-16 lightning-bolt" />
+        </motion.div>
+        <motion.div
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-32 left-[10%] text-amber-400/40"
+        >
+          <Zap className="w-10 h-10 lightning-bolt rotate-12" />
+        </motion.div>
 
         {/* Floating glass elements */}
         <motion.div
           animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-32 left-[15%] w-24 h-24 rounded-2xl glass border border-white/10 opacity-40"
+          className="absolute top-32 left-[15%] w-24 h-24 rounded-2xl glass border border-teal-500/20 opacity-40"
         />
         <motion.div
           animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-48 right-[20%] w-16 h-16 rounded-full glass border border-white/10 opacity-30"
+          className="absolute top-48 right-[20%] w-16 h-16 rounded-full glass border border-orange-500/20 opacity-30"
         />
         <motion.div
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-32 left-[25%] w-20 h-20 rounded-xl glass border border-white/10 opacity-30"
+          className="absolute bottom-32 left-[25%] w-20 h-20 rounded-xl glass border border-cyan-500/20 opacity-30"
         />
 
         {/* Content */}
@@ -71,8 +89,13 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
+              className="mb-8"
             >
-              <span className="inline-block px-4 py-2 rounded-full glass border border-white/10 text-xs uppercase tracking-[0.2em] text-white/60 mb-8">
+              {/* Logo */}
+              <div className="w-24 h-24 mx-auto mb-6 rounded-2xl overflow-hidden bg-white shadow-[0_0_40px_rgba(0,212,212,0.3)]">
+                <img src={LOGO_URL} alt="Hogwarts Music Studio" className="w-full h-full object-contain" />
+              </div>
+              <span className="inline-block px-4 py-2 rounded-full glass border border-teal-500/30 text-xs uppercase tracking-[0.2em] text-teal-400 mb-6">
                 Professional Audio Post-Production
               </span>
             </motion.div>
@@ -91,7 +114,7 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-12 leading-relaxed"
+              className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed"
             >
               Where vision meets sound. Professional dubbing, mixing, mastering, and music production for films, series, and content creators.
             </motion.p>
@@ -105,7 +128,7 @@ const HomePage = () => {
               <Link
                 to="/booking"
                 data-testid="hero-book-session"
-                className="group px-8 py-4 rounded-full bg-white text-black font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2"
+                className="group px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(0,212,212,0.3)] flex items-center justify-center gap-2"
               >
                 Book a Session
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -129,37 +152,28 @@ const HomePage = () => {
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
           <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-            <div className="w-1 h-2 rounded-full bg-white/40" />
+            <div className="w-1 h-2 rounded-full bg-teal-400/60" />
           </div>
         </motion.div>
       </section>
 
-      {/* Services Preview */}
+      {/* All Services Section */}
       <section className="relative py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16"
+            className="text-center mb-16"
           >
-            <div>
-              <span className="text-xs uppercase tracking-[0.2em] text-cyan-400 mb-4 block">What We Do</span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Our Services</h2>
-            </div>
-            <Link 
-              to="/services" 
-              className="mt-4 md:mt-0 text-white/60 hover:text-white transition-colors flex items-center gap-2 group"
-              data-testid="view-all-services"
-            >
-              View All Services
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <span className="text-xs uppercase tracking-[0.2em] text-cyan-400 mb-4 block">What We Do</span>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Our Services</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, index) => {
               const IconComponent = iconMap[service.icon] || Mic;
+              const isOrange = index % 3 === 1; // Alternate orange accent
               return (
                 <motion.div
                   key={service.id}
@@ -167,7 +181,11 @@ const HomePage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 hover:border-white/30 transition-all duration-500 hover:shadow-[0_0_40px_-10px_rgba(0,240,255,0.3)] card-hover"
+                  className={`group relative overflow-hidden rounded-3xl border bg-white/5 p-8 transition-all duration-500 card-hover ${
+                    isOrange 
+                      ? 'border-orange-500/20 hover:border-orange-500/40 hover:shadow-[0_0_40px_-10px_rgba(249,115,22,0.4)]' 
+                      : 'border-teal-500/20 hover:border-teal-500/40 hover:shadow-[0_0_40px_-10px_rgba(20,184,166,0.4)]'
+                  }`}
                   data-testid={`service-card-${index}`}
                 >
                   {/* Service image as floating widget */}
@@ -178,23 +196,27 @@ const HomePage = () => {
                         alt={service.name}
                         className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f]/80 to-transparent" />
                     </div>
                   )}
                   
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400/20 to-purple-500/20 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <IconComponent className="w-6 h-6 text-cyan-400" />
+                  <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${
+                    isOrange 
+                      ? 'bg-orange-500/20 border-orange-500/30' 
+                      : 'bg-cyan-500/20 border-cyan-500/30'
+                  }`}>
+                    <IconComponent className={`w-6 h-6 ${isOrange ? 'text-orange-400' : 'text-cyan-400'}`} />
                   </div>
                   
                   <h3 className="text-xl font-bold mb-3">{service.name}</h3>
                   <p className="text-white/50 text-sm mb-4 line-clamp-2">{service.description}</p>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-cyan-400 font-semibold">
+                    <span className={`font-semibold ${isOrange ? 'text-orange-400' : 'text-cyan-400'}`}>
                       {service.price || 'Contact for Pricing'}
                     </span>
                     <Link 
-                      to="/booking" 
+                      to={`/booking?service=${encodeURIComponent(service.name)}`}
                       className="text-sm text-white/40 hover:text-white transition-colors"
                     >
                       Book Now →
@@ -208,7 +230,7 @@ const HomePage = () => {
       </section>
 
       {/* Featured Projects */}
-      <section className="relative py-24 md:py-32 bg-gradient-to-b from-transparent via-purple-900/5 to-transparent">
+      <section className="relative py-24 md:py-32 bg-gradient-to-b from-transparent via-teal-900/5 to-transparent">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -216,7 +238,7 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-xs uppercase tracking-[0.2em] text-purple-400 mb-4 block">Portfolio</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-orange-400 mb-4 block">Portfolio</span>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Featured Projects</h2>
             <p className="text-white/50 max-w-xl mx-auto">
               A glimpse into our recent work across films, music, and multimedia productions.
@@ -242,7 +264,7 @@ const HomePage = () => {
                 />
                 
                 {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f] via-[#0a1a1f]/50 to-transparent" />
                 
                 {/* Content */}
                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
@@ -267,18 +289,34 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section with Lightning */}
       <section className="relative py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[40px] border border-white/10"
+            className="relative overflow-hidden rounded-[40px] border border-teal-500/20"
           >
             {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-indigo-900/20 to-cyan-900/30" />
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-900/40 via-cyan-900/30 to-orange-900/20" />
             <div className="absolute inset-0 backdrop-blur-3xl" />
+            
+            {/* Lightning decorations */}
+            <motion.div
+              animate={{ opacity: [0.2, 0.8, 0.2] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute top-8 right-12 text-amber-400/50"
+            >
+              <Zap className="w-12 h-12 lightning-bolt" />
+            </motion.div>
+            <motion.div
+              animate={{ opacity: [0.3, 0.9, 0.3] }}
+              transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+              className="absolute bottom-12 left-16 text-amber-400/40"
+            >
+              <Zap className="w-8 h-8 lightning-bolt -rotate-12" />
+            </motion.div>
             
             {/* Content */}
             <div className="relative p-12 md:p-20 text-center">
@@ -292,7 +330,7 @@ const HomePage = () => {
               <Link
                 to="/booking"
                 data-testid="cta-book-session"
-                className="inline-flex items-center gap-2 px-10 py-5 rounded-full bg-white text-black font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+                className="inline-flex items-center gap-2 px-10 py-5 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_40px_rgba(0,212,212,0.3)]"
               >
                 Book Your Session
                 <ArrowRight className="w-5 h-5" />
