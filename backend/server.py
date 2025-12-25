@@ -900,6 +900,13 @@ DEFAULT_SITE_CONTENT = {
     "founder_bio": "With years of experience in music composition and audio production, Leo has worked on numerous films, series, and commercial projects, bringing creative vision to life through sound.",
     "founder_imdb_url": "https://www.imdb.com/name/nm15867951/?ref_=ext_shr_lnk",
     "founder_imdb_text": "View IMDB Profile",
+    # Stats Section
+    "stat1_value": "6+",
+    "stat1_label": "Years Experience",
+    "stat2_value": "50+",
+    "stat2_label": "Projects Delivered",
+    "stat3_value": "100%",
+    "stat3_label": "Client Satisfaction",
     # CTA Section
     "cta_title": "Ready to Create Something Amazing?",
     "cta_subtitle": "Let's bring your audio vision to life. Book a session today.",
@@ -915,6 +922,16 @@ DEFAULT_SITE_CONTENT = {
     "careers_job_desc": "Join our team of professional sound engineers. We offer competitive salaries and the chance to work on exciting projects.",
     "careers_form_title": "Apply Now",
     "careers_form_subtitle": "Tell us about yourself and we'll get back to you",
+    # Application Form Labels
+    "app_name_label": "Full Name",
+    "app_email_label": "Email Address",
+    "app_phone_label": "Phone Number",
+    "app_city_label": "City",
+    "app_instagram_label": "Instagram ID (optional)",
+    "app_youtube_label": "YouTube Links (optional)",
+    "app_cv_label": "Upload CV/Resume (optional)",
+    "app_note_label": "Tell us about yourself",
+    "app_portfolio_label": "Portfolio Link (optional)",
     # Applications Tab (Admin)
     "applications_title": "Job Applications",
     "applications_subtitle": "Review and manage job applications",
