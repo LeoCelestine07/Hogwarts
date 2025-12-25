@@ -1,168 +1,199 @@
 {
-  "timestamp": "2025-12-25T18:08:59.180827",
-  "total_tests": 32,
-  "passed_tests": 30,
-  "success_rate": 93.75,
-  "results": [
+  "timestamp": "2025-12-25T19:48:56.742374",
+  "summary": {
+    "tests_run": 27,
+    "tests_passed": 21,
+    "success_rate": "77.8%"
+  },
+  "detailed_results": [
     {
-      "test": "Root API",
+      "test": "Admin Login",
       "success": true,
-      "details": "Status: 200"
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
     },
     {
       "test": "Get Services",
       "success": true,
-      "details": "Status: 200"
-    },
-    {
-      "test": "Services Count (\u22656)",
-      "success": true,
-      "details": "Found 6 services"
-    },
-    {
-      "test": "Service: Dubbing",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Service: Vocal Recording",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Service: Mixing",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Service: Mastering",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Service: SFX & Foley",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Service: Music Production",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Dubbing Fixed Price",
-      "success": true,
-      "details": "\u20b9299/hr"
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
     },
     {
       "test": "Get Projects",
       "success": true,
-      "details": "Status: 200"
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
     },
     {
-      "test": "Projects Count (\u22655)",
+      "test": "Get Site Content",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Get Contact Info",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Get Site Content",
+      "success": true,
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Stats Section Fields Present",
       "success": false,
-      "details": "Found 3 projects"
+      "details": "Missing fields: ['stat1_value', 'stat1_label', 'stat2_value', 'stat2_label', 'stat3_value', 'stat3_label']",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "User Registration",
+      "test": "Update Application Form Labels",
       "success": true,
-      "details": "Status: 200"
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
     },
     {
-      "test": "User Token Generated",
+      "test": "Form Label app_name_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "User Login",
+      "test": "Form Label app_email_label Updated",
       "success": true,
-      "details": "Skipped - using registration token"
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Get Services",
+      "test": "Form Label app_phone_label Updated",
       "success": true,
-      "details": "Status: 200"
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Services Count (\u22656)",
+      "test": "Form Label app_city_label Updated",
       "success": true,
-      "details": "Found 6 services"
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: Dubbing",
+      "test": "Form Label app_instagram_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: Vocal Recording",
+      "test": "Form Label app_youtube_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: Mixing",
+      "test": "Form Label app_cv_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: Mastering",
+      "test": "Form Label app_note_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: SFX & Foley",
+      "test": "Form Label app_portfolio_label Updated",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Service: Music Production",
+      "test": "Get Job Applications (Admin)",
       "success": true,
-      "details": ""
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
     },
     {
-      "test": "Dubbing Fixed Price",
+      "test": "Admin Applications Access",
       "success": true,
-      "details": "\u20b9299/hr"
+      "details": "Found 1 applications",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Booking Creation",
-      "success": true,
-      "details": "Status: 200"
-    },
-    {
-      "test": "Booking Response Format",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Admin OTP Request",
+      "test": "Application Field instagram_id Present",
       "success": false,
-      "details": "Status: 400 (Expected 200) - This email is already registered as an admin"
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "AI Chat",
-      "success": true,
-      "details": "Status: 200"
+      "test": "Application Field youtube_link1 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Chat Response Format",
-      "success": true,
-      "details": ""
+      "test": "Application Field youtube_link2 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Chat Response Content",
-      "success": true,
-      "details": "Response length: 680"
+      "test": "Application Field youtube_link3 Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Get User Profile",
-      "success": true,
-      "details": "Status: 200"
+      "test": "Application Field cv_filename Present",
+      "success": false,
+      "details": "Field missing in application data",
+      "expected_status": null,
+      "actual_status": null
     },
     {
-      "test": "Get User Bookings",
+      "test": "Submit Job Application with New Fields",
       "success": true,
-      "details": "Status: 200"
+      "details": "",
+      "expected_status": 200,
+      "actual_status": 200
+    },
+    {
+      "test": "Job Application Submission",
+      "success": true,
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "CV Upload Endpoint Exists",
+      "success": true,
+      "details": "Endpoint responds correctly to missing file",
+      "expected_status": null,
+      "actual_status": null
     }
   ]
 }
