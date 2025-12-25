@@ -2150,6 +2150,256 @@ const ContentManagement = () => {
           </div>
         </div>
 
+        {/* Projects Page */}
+        <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
+          <h3 className="font-bold text-lg mb-4 text-orange-400">Projects Page</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Badge</label>
+              <input
+                type="text"
+                value={content.projects_page_badge || ''}
+                onChange={(e) => handleInputChange('projects_page_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Our Portfolio"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Page Title</label>
+              <input
+                type="text"
+                value={content.projects_page_title || ''}
+                onChange={(e) => handleInputChange('projects_page_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Featured"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title Gradient (2nd line)</label>
+              <input
+                type="text"
+                value={content.projects_page_title_gradient || ''}
+                onChange={(e) => handleInputChange('projects_page_title_gradient', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Projects"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white/60 mb-2">Page Subtitle</label>
+              <textarea
+                value={content.projects_page_subtitle || ''}
+                onChange={(e) => handleInputChange('projects_page_subtitle', e.target.value)}
+                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50 resize-none"
+                placeholder="Explore our collection of completed works..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 1 Value</label>
+              <input
+                type="text"
+                value={content.projects_stat1_value || ''}
+                onChange={(e) => handleInputChange('projects_stat1_value', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="50+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 1 Label</label>
+              <input
+                type="text"
+                value={content.projects_stat1_label || ''}
+                onChange={(e) => handleInputChange('projects_stat1_label', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Projects Completed"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 2 Value</label>
+              <input
+                type="text"
+                value={content.projects_stat2_value || ''}
+                onChange={(e) => handleInputChange('projects_stat2_value', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="25+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 2 Label</label>
+              <input
+                type="text"
+                value={content.projects_stat2_label || ''}
+                onChange={(e) => handleInputChange('projects_stat2_label', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Films Dubbed"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 3 Value</label>
+              <input
+                type="text"
+                value={content.projects_stat3_value || ''}
+                onChange={(e) => handleInputChange('projects_stat3_value', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="100+"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 3 Label</label>
+              <input
+                type="text"
+                value={content.projects_stat3_label || ''}
+                onChange={(e) => handleInputChange('projects_stat3_label', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Hours Mixed"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 4 Value</label>
+              <input
+                type="text"
+                value={content.projects_stat4_value || ''}
+                onChange={(e) => handleInputChange('projects_stat4_value', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="99%"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Stat 4 Label</label>
+              <input
+                type="text"
+                value={content.projects_stat4_label || ''}
+                onChange={(e) => handleInputChange('projects_stat4_label', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Client Satisfaction"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* About Page Timeline/Story */}
+        <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
+          <h3 className="font-bold text-lg mb-4 text-cyan-400">Our Story / Timeline (About Page)</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Year 1</label>
+              <input
+                type="text"
+                value={content.timeline_year1 || ''}
+                onChange={(e) => handleInputChange('timeline_year1', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="2018"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title 1</label>
+              <input
+                type="text"
+                value={content.timeline_title1 || ''}
+                onChange={(e) => handleInputChange('timeline_title1', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Founded"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Description 1</label>
+              <input
+                type="text"
+                value={content.timeline_desc1 || ''}
+                onChange={(e) => handleInputChange('timeline_desc1', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Year 2</label>
+              <input
+                type="text"
+                value={content.timeline_year2 || ''}
+                onChange={(e) => handleInputChange('timeline_year2', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="2020"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title 2</label>
+              <input
+                type="text"
+                value={content.timeline_title2 || ''}
+                onChange={(e) => handleInputChange('timeline_title2', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Expansion"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Description 2</label>
+              <input
+                type="text"
+                value={content.timeline_desc2 || ''}
+                onChange={(e) => handleInputChange('timeline_desc2', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Year 3</label>
+              <input
+                type="text"
+                value={content.timeline_year3 || ''}
+                onChange={(e) => handleInputChange('timeline_year3', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="2022"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title 3</label>
+              <input
+                type="text"
+                value={content.timeline_title3 || ''}
+                onChange={(e) => handleInputChange('timeline_title3', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Growth"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Description 3</label>
+              <input
+                type="text"
+                value={content.timeline_desc3 || ''}
+                onChange={(e) => handleInputChange('timeline_desc3', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Year 4</label>
+              <input
+                type="text"
+                value={content.timeline_year4 || ''}
+                onChange={(e) => handleInputChange('timeline_year4', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="2024"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Title 4</label>
+              <input
+                type="text"
+                value={content.timeline_title4 || ''}
+                onChange={(e) => handleInputChange('timeline_title4', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Present"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Description 4</label>
+              <input
+                type="text"
+                value={content.timeline_desc4 || ''}
+                onChange={(e) => handleInputChange('timeline_desc4', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Application Form Labels */}
         <div className="glass rounded-xl p-6 border border-white/10 lg:col-span-2">
           <h3 className="font-bold text-lg mb-4 text-pink-400">Application Form Labels</h3>
