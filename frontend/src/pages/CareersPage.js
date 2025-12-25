@@ -300,7 +300,7 @@ const CareersPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-white/60 mb-2">Portfolio Link (Optional)</label>
+                <label className="block text-sm text-white/60 mb-2">{content?.app_portfolio_label || 'Portfolio Link (Optional)'}</label>
                 <input
                   type="url"
                   value={formData.portfolio_url}
@@ -309,6 +309,103 @@ const CareersPage = () => {
                   placeholder="https://yourportfolio.com"
                   data-testid="input-portfolio"
                 />
+              </div>
+
+              {/* Instagram ID */}
+              <div>
+                <label className="block text-sm text-white/60 mb-2">
+                  <Instagram className="w-4 h-4 inline mr-2" />
+                  {content?.app_instagram_label || 'Instagram ID (optional)'}
+                </label>
+                <input
+                  type="text"
+                  value={formData.instagram_id}
+                  onChange={(e) => setFormData({ ...formData, instagram_id: e.target.value })}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:border-cyan-500/50 transition-colors"
+                  placeholder="@yourhandle"
+                  data-testid="input-instagram"
+                />
+              </div>
+
+              {/* YouTube Links */}
+              <div>
+                <label className="block text-sm text-white/60 mb-2">
+                  <Youtube className="w-4 h-4 inline mr-2" />
+                  {content?.app_youtube_label || 'YouTube Links (optional)'}
+                </label>
+                <div className="space-y-3">
+                  <input
+                    type="url"
+                    value={formData.youtube_link1}
+                    onChange={(e) => setFormData({ ...formData, youtube_link1: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:border-cyan-500/50 transition-colors"
+                    placeholder="YouTube Link 1"
+                    data-testid="input-youtube1"
+                  />
+                  <input
+                    type="url"
+                    value={formData.youtube_link2}
+                    onChange={(e) => setFormData({ ...formData, youtube_link2: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:border-cyan-500/50 transition-colors"
+                    placeholder="YouTube Link 2"
+                    data-testid="input-youtube2"
+                  />
+                  <input
+                    type="url"
+                    value={formData.youtube_link3}
+                    onChange={(e) => setFormData({ ...formData, youtube_link3: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white focus:border-cyan-500/50 transition-colors"
+                    placeholder="YouTube Link 3"
+                    data-testid="input-youtube3"
+                  />
+                </div>
+              </div>
+
+              {/* CV Upload */}
+              <div>
+                <label className="block text-sm text-white/60 mb-2">
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  {content?.app_cv_label || 'Upload CV/Resume (optional)'}
+                </label>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleCvUpload}
+                  accept=".pdf,.doc,.docx"
+                  className="hidden"
+                  data-testid="input-cv"
+                />
+                {!cvFile ? (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingCv}
+                    className="w-full bg-white/5 border border-dashed border-white/20 rounded-xl px-5 py-6 text-white/50 hover:border-cyan-500/50 hover:text-white/70 transition-colors flex items-center justify-center gap-2"
+                  >
+                    {uploadingCv ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        <Upload className="w-5 h-5" />
+                        Click to upload PDF or Word document (max 10MB)
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <div className="w-full bg-white/5 border border-cyan-500/30 rounded-xl px-5 py-4 text-white flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-5 h-5 text-cyan-400" />
+                      <span className="truncate max-w-[200px]">{cvFile.name}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={removeCv}
+                      className="text-white/50 hover:text-red-400 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div>
