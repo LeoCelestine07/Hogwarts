@@ -206,6 +206,15 @@ class AdminApprovalRequest(BaseModel):
     email: EmailStr
     name: str
 
+class JobApplicationCreate(BaseModel):
+    name: str
+    email: EmailStr
+    phone: str
+    city: str
+    position_type: str  # "intern" or "engineer"
+    note: str
+    portfolio_url: Optional[str] = None
+
 # =========================
 # AUTH HELPERS
 # =========================
