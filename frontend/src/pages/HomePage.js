@@ -262,12 +262,12 @@ const HomePage = () => {
                 <img 
                   src={resolveImageUrl(project.image_url, 'project')} 
                   alt={project.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                   onError={(e) => handleImageError(e, 'project')}
                 />
                 
                 {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f] via-[#0a1a1f]/50 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1a1f] via-[#0a1a1f]/30 to-transparent" />
                 
                 {/* Content */}
                 <div className="absolute inset-0 p-6 flex flex-col justify-end">
