@@ -170,17 +170,37 @@ class ContactInfoUpdate(BaseModel):
     twitter_url: Optional[str] = None
 
 class SiteContentUpdate(BaseModel):
+    # Logo
+    logo_url: Optional[str] = None
+    logo_alt: Optional[str] = None
+    # Navbar
+    navbar_brand: Optional[str] = None
+    navbar_brand_sub: Optional[str] = None
+    nav_home: Optional[str] = None
+    nav_services: Optional[str] = None
+    nav_projects: Optional[str] = None
+    nav_about: Optional[str] = None
+    nav_careers: Optional[str] = None
+    nav_booking: Optional[str] = None
     # Hero Section
+    hero_badge: Optional[str] = None
     hero_title: Optional[str] = None
+    hero_title_gradient: Optional[str] = None
     hero_subtitle: Optional[str] = None
     hero_cta_text: Optional[str] = None
+    hero_cta_secondary: Optional[str] = None
     # Services Section
+    services_badge: Optional[str] = None
     services_title: Optional[str] = None
     services_subtitle: Optional[str] = None
+    services_cta: Optional[str] = None
     # Projects Section
+    projects_badge: Optional[str] = None
     projects_title: Optional[str] = None
     projects_subtitle: Optional[str] = None
+    projects_cta: Optional[str] = None
     # About Section
+    about_badge: Optional[str] = None
     about_title: Optional[str] = None
     about_subtitle: Optional[str] = None
     about_description: Optional[str] = None
@@ -188,19 +208,36 @@ class SiteContentUpdate(BaseModel):
     founder_title: Optional[str] = None
     founder_bio: Optional[str] = None
     founder_imdb_url: Optional[str] = None
+    founder_imdb_text: Optional[str] = None
     # CTA Section
     cta_title: Optional[str] = None
     cta_subtitle: Optional[str] = None
     cta_button_text: Optional[str] = None
+    # Careers Section
+    careers_badge: Optional[str] = None
+    careers_title: Optional[str] = None
+    careers_subtitle: Optional[str] = None
+    careers_description: Optional[str] = None
+    careers_intern_title: Optional[str] = None
+    careers_intern_desc: Optional[str] = None
+    careers_job_title: Optional[str] = None
+    careers_job_desc: Optional[str] = None
+    careers_form_title: Optional[str] = None
+    careers_form_subtitle: Optional[str] = None
+    # Applications Tab (Admin)
+    applications_title: Optional[str] = None
+    applications_subtitle: Optional[str] = None
+    applications_empty_text: Optional[str] = None
     # Footer
     footer_tagline: Optional[str] = None
+    footer_quick_links_title: Optional[str] = None
+    footer_services_title: Optional[str] = None
+    footer_contact_title: Optional[str] = None
     copyright_text: Optional[str] = None
     # Booking Page
+    booking_badge: Optional[str] = None
     booking_title: Optional[str] = None
     booking_subtitle: Optional[str] = None
-    # Logo
-    logo_url: Optional[str] = None
-    logo_alt: Optional[str] = None
 
 class AdminApprovalRequest(BaseModel):
     email: EmailStr
