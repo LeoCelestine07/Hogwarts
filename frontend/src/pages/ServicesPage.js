@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Mic, MicVocal, Sliders, Music, Volume2, Disc, Zap } from 'lucide-react';
 import axios from 'axios';
+import { resolveImageUrl, handleImageError } from '../utils/imageUtils';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
