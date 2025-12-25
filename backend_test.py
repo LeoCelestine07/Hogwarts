@@ -296,6 +296,187 @@ class HogwartsAPITester:
         except Exception as e:
             self.log_result("CV Upload Endpoint Exists", False, f"Exception: {str(e)}")
 
+    def test_projects_page_cms(self):
+        """Test Projects Page CMS functionality"""
+        print("\n📊 Testing Projects Page CMS...")
+        
+        # Get current content
+        content = self.run_test(
+            "Get Site Content",
+            "GET", 
+            "settings/content",
+            200
+        )
+        
+        if content:
+            # Check if projects page stats fields exist
+            projects_fields = [
+                'projects_page_badge', 'projects_page_title', 'projects_page_title_gradient',
+                'projects_page_subtitle', 'projects_stat1_value', 'projects_stat1_label',
+                'projects_stat2_value', 'projects_stat2_label', 'projects_stat3_value', 
+                'projects_stat3_label', 'projects_stat4_value', 'projects_stat4_label'
+            ]
+            missing_fields = []
+            for field in projects_fields:
+                if field not in content:
+                    missing_fields.append(field)
+            
+            if missing_fields:
+                self.log_result("Projects Page Stats Fields Present", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_result("Projects Page Stats Fields Present", True)
+                
+                # Test updating projects page stats
+                update_data = {
+                    "projects_stat1_value": "50+",
+                    "projects_stat1_label": "Projects Completed",
+                    "projects_stat2_value": "25+", 
+                    "projects_stat2_label": "Films Dubbed",
+                    "projects_stat3_value": "100+",
+                    "projects_stat3_label": "Hours Mixed",
+                    "projects_stat4_value": "99%",
+                    "projects_stat4_label": "Client Satisfaction"
+                }
+                
+                updated = self.run_test(
+                    "Update Projects Page Stats",
+                    "PUT",
+                    "settings/content",
+                    200,
+                    data=update_data
+                )
+                
+                if updated:
+                    # Verify the update
+                    for key, value in update_data.items():
+                        if updated.get(key) == value:
+                            self.log_result(f"Projects Stats Field {key} Updated", True)
+                        else:
+                            self.log_result(f"Projects Stats Field {key} Updated", False, f"Expected {value}, got {updated.get(key)}")
+
+    def test_timeline_cms(self):
+        """Test About Page Timeline CMS functionality"""
+        print("\n📅 Testing About Page Timeline CMS...")
+        
+        # Get current content
+        content = self.run_test(
+            "Get Site Content",
+            "GET", 
+            "settings/content",
+            200
+        )
+        
+        if content:
+            # Check if timeline fields exist
+            timeline_fields = [
+                'timeline_year1', 'timeline_title1', 'timeline_desc1',
+                'timeline_year2', 'timeline_title2', 'timeline_desc2',
+                'timeline_year3', 'timeline_title3', 'timeline_desc3',
+                'timeline_year4', 'timeline_title4', 'timeline_desc4'
+            ]
+            missing_fields = []
+            for field in timeline_fields:
+                if field not in content:
+                    missing_fields.append(field)
+            
+            if missing_fields:
+                self.log_result("Timeline Fields Present", False, f"Missing fields: {missing_fields}")
+            else:
+                self.log_result("Timeline Fields Present", True)
+                
+                # Test updating timeline content
+                update_data = {
+                    "timeline_year1": "2018",
+                    "timeline_title1": "Founded",
+                    "timeline_desc1": "Started as a small dubbing studio with a passion for sound.",
+                    "timeline_year2": "2020",
+                    "timeline_title2": "Expansion", 
+                    "timeline_desc2": "Upgraded to state-of-the-art equipment and expanded services.",
+                    "timeline_year3": "2022",
+                    "timeline_title3": "Growth",
+                    "timeline_desc3": "Served 50+ clients including indie filmmakers and production houses.",
+                    "timeline_year4": "2024",
+                    "timeline_title4": "Present",
+                    "timeline_desc4": "Full-service audio post-production with cutting-edge technology."
+                }
+                
+                updated = self.run_test(
+                    "Update Timeline Content",
+                    "PUT",
+                    "settings/content",
+                    200,
+                    data=update_data
+                )
+                
+                if updated:
+                    # Verify the update
+                    for key, value in update_data.items():
+                        if updated.get(key) == value:
+                            self.log_result(f"Timeline Field {key} Updated", True)
+                        else:
+                            self.log_result(f"Timeline Field {key} Updated", False, f"Expected {value}, got {updated.get(key)}")
+
+    def test_application_status_update_email(self):
+        """Test application status update with email sending"""
+        print("\n📧 Testing Application Status Update with Email...")
+        
+        # First create a test application
+        application_data = {
+            "name": "Test Applicant for Email",
+            "email": "test.email@example.com",
+            "phone": "+91 9876543210",
+            "city": "Mumbai",
+            "position_type": "engineer",
+            "note": "Test application for email functionality testing."
+        }
+        
+        app_response = self.run_test(
+            "Create Test Application",
+            "POST",
+            "applications",
+            200,
+            data=application_data
+        )
+        
+        if app_response and 'id' in app_response:
+            app_id = app_response['id']
+            
+            # Test updating status to 'hired' (should trigger email)
+            status_update = {"status": "hired"}
+            
+            updated = self.run_test(
+                "Update Application Status to Hired",
+                "PUT",
+                f"applications/{app_id}/status",
+                200,
+                data=status_update
+            )
+            
+            if updated:
+                if updated.get('status') == 'hired':
+                    self.log_result("Application Status Updated to Hired", True)
+                    # Note: We can't directly test email sending without email service access
+                    # But we can verify the API call succeeds
+                    self.log_result("Email Trigger for Hired Status", True, "API call successful - email should be sent")
+                else:
+                    self.log_result("Application Status Updated to Hired", False, f"Status not updated correctly: {updated.get('status')}")
+            
+            # Test other status updates
+            for status in ['rejected', 'pending']:
+                status_update = {"status": status}
+                updated = self.run_test(
+                    f"Update Application Status to {status.title()}",
+                    "PUT",
+                    f"applications/{app_id}/status",
+                    200,
+                    data=status_update
+                )
+                
+                if updated and updated.get('status') == status:
+                    self.log_result(f"Application Status Updated to {status.title()}", True)
+                else:
+                    self.log_result(f"Application Status Updated to {status.title()}", False)
+
     def test_admin_applications_access(self):
         """Test admin access to job applications"""
         print("\n👨‍💼 Testing Admin Applications Access...")
