@@ -118,7 +118,7 @@ const ProjectsPage = () => {
                       <img 
                         src={resolveImageUrl(project.image_url, 'project')} 
                         alt={project.name}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                         onError={(e) => handleImageError(e, 'project')}
                       />
                     </div>
