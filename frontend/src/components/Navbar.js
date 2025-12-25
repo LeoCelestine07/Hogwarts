@@ -92,7 +92,7 @@ const Navbar = () => {
       }`}
     >
       <div
-        className={`rounded-full backdrop-blur-xl border transition-all duration-500 ${
+        className={`rounded-2xl backdrop-blur-xl border transition-all duration-500 ${
           scrolled
             ? 'bg-[#0a1a1f]/80 border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
             : 'bg-[#0a1a1f]/60 border-white/10'
