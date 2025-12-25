@@ -1251,20 +1251,22 @@ const AdminManagement = () => {
                       <CheckCircle className="w-4 h-4" /> Always
                     </span>
                   ) : (
-                    <button
-                      onClick={() => toggleAccess(admin.id, admin.has_full_access)}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs transition-colors ${
-                        admin.has_full_access 
-                          ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30' 
-                          : 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-                      }`}
+                    <Select
+                      value={admin.access_level || 'basic'}
+                      onValueChange={(value) => toggleAccess(admin.id, value === 'full' ? 'basic' : 'full')}
                     >
-                      {admin.has_full_access ? (
-                        <><Eye className="w-3 h-3" /> Enabled</>
-                      ) : (
-                        <><EyeOff className="w-3 h-3" /> Disabled</>
-                      )}
-                    </button>
+                      <SelectTrigger className={`w-32 h-8 text-xs ${
+                        admin.access_level === 'full'
+                          ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                          : 'bg-orange-500/20 text-orange-400 border-orange-500/30'
+                      }`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#0d2229] border-white/10">
+                        <SelectItem value="basic">Basic (View Only)</SelectItem>
+                        <SelectItem value="full">Full Access</SelectItem>
+                      </SelectContent>
+                    </Select>
                   )}
                 </td>
                 <td className="p-4">
