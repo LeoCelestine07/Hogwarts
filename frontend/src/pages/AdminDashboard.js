@@ -2727,18 +2727,19 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-[#0a1a1f] pt-28" data-testid="admin-dashboard">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 fixed left-0 top-28 bottom-0 border-r border-white/5 p-6 hidden lg:block">
-          {/* Admin Badge */}
-          {isSuperAdmin && (
-            <div className="mb-6 p-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium text-amber-400">Super Admin</span>
+        <aside className="w-64 fixed left-0 top-28 bottom-0 border-r border-white/5 p-6 hidden lg:block overflow-y-auto">
+          <div className="sticky top-0 pb-6">
+            {/* Admin Badge */}
+            {isSuperAdmin && (
+              <div className="mb-6 p-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-amber-400" />
+                  <span className="text-sm font-medium text-amber-400">Super Admin</span>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <div className="space-y-2">
+            <div className="space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.path}
