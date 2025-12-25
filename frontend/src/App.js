@@ -53,6 +53,7 @@ function App() {
           />
         </div>
       </BrowserRouter>
+      </ThemeProvider>
     </AuthProvider>
   );
 }
