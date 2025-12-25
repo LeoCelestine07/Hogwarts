@@ -796,18 +796,34 @@ DEFAULT_SITE_CONTENT = {
     # Logo
     "logo_url": "https://customer-assets.emergentagent.com/job_audio-haven-21/artifacts/kjwts159_HOGWARTS%20%20white%20bg%20only%20logo%20.jpg",
     "logo_alt": "Hogwarts Music Studio",
+    # Navbar
+    "navbar_brand": "Hogwarts",
+    "navbar_brand_sub": "Music Studio",
+    "nav_home": "Home",
+    "nav_services": "Services",
+    "nav_projects": "Projects",
+    "nav_about": "About",
+    "nav_careers": "Careers",
+    "nav_booking": "Book Now",
     # Hero Section
+    "hero_badge": "Professional Audio Post-Production",
     "hero_title": "Crafting",
     "hero_title_gradient": "Sonic Excellence",
     "hero_subtitle": "Where vision meets sound. Professional dubbing, mixing, mastering, and music production for films, series, and content creators.",
     "hero_cta_text": "Book a Session",
+    "hero_cta_secondary": "Our Services",
     # Services Section
+    "services_badge": "What We Offer",
     "services_title": "Our Services",
     "services_subtitle": "Professional audio services tailored to your needs",
+    "services_cta": "View All Services",
     # Projects Section
+    "projects_badge": "Our Work",
     "projects_title": "Featured Projects",
     "projects_subtitle": "Explore our latest work and collaborations",
+    "projects_cta": "View All Projects",
     # About Section
+    "about_badge": "About Us",
     "about_title": "Crafting Sound Since 2018",
     "about_subtitle": "Where passion meets precision",
     "about_description": "Hogwarts Music Studio is a professional audio post-production facility dedicated to delivering exceptional sound experiences. We combine cutting-edge technology with artistic vision to bring your projects to life.",
@@ -815,22 +831,32 @@ DEFAULT_SITE_CONTENT = {
     "founder_title": "Music Composer & Founder",
     "founder_bio": "With years of experience in music composition and audio production, Leo has worked on numerous films, series, and commercial projects, bringing creative vision to life through sound.",
     "founder_imdb_url": "https://www.imdb.com/name/nm15867951/?ref_=ext_shr_lnk",
+    "founder_imdb_text": "View IMDB Profile",
     # CTA Section
     "cta_title": "Ready to Create Something Amazing?",
     "cta_subtitle": "Let's bring your audio vision to life. Book a session today.",
     "cta_button_text": "Start Your Project",
+    # Careers Section
+    "careers_badge": "Join Our Team",
+    "careers_title": "Work With Us",
+    "careers_subtitle": "Join Hogwarts Music Studio and be part of something extraordinary",
+    "careers_description": "We're always looking for talented individuals to join our team. Whether you're an experienced sound engineer or a passionate intern looking to learn, we have opportunities for you.",
+    "careers_intern_title": "Internship Program",
+    "careers_intern_desc": "Learn from industry professionals and work on real projects. Perfect for students and aspiring audio engineers.",
+    "careers_job_title": "Sound Engineers",
+    "careers_job_desc": "Join our team of professional sound engineers. We offer competitive salaries and the chance to work on exciting projects.",
+    "careers_form_title": "Apply Now",
+    "careers_form_subtitle": "Tell us about yourself and we'll get back to you",
     # Footer
     "footer_tagline": "Professional audio post-production studio crafting sonic excellence for films, music, and content creators.",
+    "footer_quick_links_title": "Quick Links",
+    "footer_services_title": "Services",
+    "footer_contact_title": "Contact",
     "copyright_text": "Hogwarts Music Studio. All rights reserved.",
     # Booking Page
+    "booking_badge": "Book a Session",
     "booking_title": "Schedule Your Studio Session",
     "booking_subtitle": "No account required. Fill out the form and we'll handle the rest.",
-    # Navbar
-    "nav_home": "Home",
-    "nav_services": "Services",
-    "nav_projects": "Projects",
-    "nav_about": "About",
-    "nav_booking": "Book Session"
 }
 
 @api_router.get("/settings/contact")
