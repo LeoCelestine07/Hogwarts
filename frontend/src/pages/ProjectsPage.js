@@ -8,11 +8,13 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
+  const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     fetchProjects();
+    fetchContent();
   }, []);
 
   const fetchProjects = async () => {
@@ -26,8 +28,24 @@ const ProjectsPage = () => {
     }
   };
 
+  const fetchContent = async () => {
+    try {
+      const response = await axios.get(`${API}/settings/content`);
+      setContent(response.data);
+    } catch (error) {
+      console.error('Error fetching content:', error);
+    }
+  };
+
   const workTypes = ['all', ...new Set(projects.map(p => p.work_type))];
   const filteredProjects = filter === 'all' ? projects : projects.filter(p => p.work_type === filter);
+
+  const stats = [
+    { value: content?.projects_stat1_value || '50+', label: content?.projects_stat1_label || 'Projects Completed', color: 'cyan' },
+    { value: content?.projects_stat2_value || '25+', label: content?.projects_stat2_label || 'Films Dubbed', color: 'orange' },
+    { value: content?.projects_stat3_value || '100+', label: content?.projects_stat3_label || 'Hours Mixed', color: 'teal' },
+    { value: content?.projects_stat4_value || '99%', label: content?.projects_stat4_label || 'Client Satisfaction', color: 'amber' },
+  ];
 
   return (
     <div className="relative min-h-screen" data-testid="projects-page">
@@ -47,14 +65,14 @@ const ProjectsPage = () => {
             className="text-center"
           >
             <span className="inline-block px-4 py-2 rounded-full glass border border-orange-500/30 text-xs uppercase tracking-[0.2em] text-orange-400 mb-6">
-              Our Portfolio
+              {content?.projects_page_badge || 'Our Portfolio'}
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
-              Featured<br />
-              <span className="text-gradient">Projects</span>
+              {content?.projects_page_title || 'Featured'}<br />
+              <span className="text-gradient">{content?.projects_page_title_gradient || 'Projects'}</span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto">
-              Explore our collection of completed works across films, music, documentaries, and multimedia productions.
+              {content?.projects_page_subtitle || 'Explore our collection of completed works across films, music, documentaries, and multimedia productions.'}
             </p>
           </motion.div>
 
@@ -187,12 +205,7 @@ const ProjectsPage = () => {
             viewport={{ once: true }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
-            {[
-              { value: '50+', label: 'Projects Completed', color: 'cyan' },
-              { value: '25+', label: 'Films Dubbed', color: 'orange' },
-              { value: '100+', label: 'Hours Mixed', color: 'teal' },
-              { value: '99%', label: 'Client Satisfaction', color: 'amber' },
-            ].map((stat, index) => (
+            {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <span className="text-4xl md:text-5xl font-bold text-gradient">{stat.value}</span>
                 <p className="text-white/40 text-sm mt-2">{stat.label}</p>
