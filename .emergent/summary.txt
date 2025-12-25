@@ -3,134 +3,107 @@ Build a full-stack, multi-page modern web application for a professional audio p
 
 **PRODUCT REQUIREMENTS:**
 - **UI/UX:** Premium, cinematic, futuristic, and energetic feel with floating glass widgets, rich motion, depth, and parallax animations. Strictly no background images. The color theme should be mint, teal, orange, and cyan.
-- **Pages:** Home, Services, Projects, About, Contact/Booking, optional Login/Signup, and a protected Admin Dashboard.
+- **Pages:** Home, Services, Projects, About, Contact/Booking, and a protected Admin Dashboard.
 - **Navigation:** A sticky, floating glassmorphic top navigation bar.
-- **Services Page:** Display services (Dubbing, Vocal Recording, Mixing, etc.) as individual floating glass widgets. Dubbing has a fixed price; others are project-based.
-- **Projects Page:** A portfolio page showcasing the top 5 featured projects as glass cards with placeholders for images and details.
-- **About Page:** A dedicated page with studio vision, founder info (Leo Celestine with IMDB link), etc.
+- **Services Page:** Display services as individual floating glass widgets.
+- **Projects Page:** A portfolio page showcasing featured projects.
+- **About Page:** A dedicated page with studio vision and founder info.
 - **Booking System:**
   - Must work for users without an account.
-  - Booking form with Full Name, Email, Phone, Service, Project Description, and Preferred Date & Time.
-  - Option to select the number of hours for Dubbing and Vocal Recording.
-  - Display a message about additional charges for extra hours.
-- **Notifications:**
-  - User receives email confirmation upon booking.
-  - Admin receives an email notification for new bookings.
-- **User Accounts:** Optional for users to view booking history and track project status. A pop-up should suggest login/signup after a booking is made.
-- **Admin Dashboard:**
-  - **Super Admin ():** Full control over the website content without coding. This includes:
-    - Managing services (add/edit/delete, change pricing).
-    - Managing projects (add/edit/delete, upload images from computer/phone).
-    - Changing the website's theme (solid colors, textures, gradients for each section).
-    - Managing other admin accounts and their access levels.
-  - **Other Admins:** Default to basic access (viewing bookings and details only).
-  - Admins can approve or reject bookings, and the status should be trackable by the client.
-- **Integrations:** Resend for emails (API Key: ).
-- **Logo:** The provided Hogwarts Music Studio logo should be used in the navbar.
+  - Booking form with hourly options for Dubbing and Vocal Recording.
+- **Notifications & Status:**
+  - User receives an Enquiry Received email upon booking.
+  - Admin receives a notification for new bookings.
+  - Admins can approve or reject bookings.
+  - User receives a Booking Confirmed email upon admin approval.
+- **Admin Dashboard & CMS:**
+  - **Super Admin ():** Full control over all website content without coding. This includes managing services, projects, all text content, contact information, location, logo, and the website's theme.
+  - **Admin Management:** Super admin can manage other admin accounts, set their access levels, and suspend them. New admin signups require super admin approval via an OTP sent to their email.
+  - **Basic Admins:** Default to basic access (viewing bookings).
+- **Careers Page:**
+  - A new Hire page for internship and sound engineer positions.
+  - An application form for candidates to submit their details.
+  - A dedicated Applications tab in the admin dashboard for the super admin to review submissions.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack application with a React frontend and FastAPI backend is in place. The application features a multi-page structure and a glassmorphic UI with a mint/teal/orange/cyan color scheme. Pages for Home, Services, Projects, About, and Booking have been created. Basic user and admin authentication (JWT-based) is implemented. An admin dashboard exists but is largely non-functional, as changes made within it do not reflect on the main website.
+A full-stack application (React frontend, FastAPI backend) is in place. The app has a glassmorphic UI and includes pages for Home, Services, Projects, About, Booking, and a new Careers page. A comprehensive admin dashboard has been built, allowing a super admin to manage services, projects, site-wide themes, contact information, and other admins. A Content Management System (CMS) has been implemented to allow text customization, though not all site content is dynamic yet. Features like OTP-based password reset, hourly booking, and an admin approval flow for new signups are also implemented.
 
 **Last working item**:
-The agent received extensive feedback from the user detailing critical failures in the admin dashboard and requesting significant new features for the booking flow and admin role management. The agent acknowledged these issues and was about to begin implementation.
+The agent was implementing a new Careers page and a corresponding Applications management tab in the admin dashboard, as requested by the user. This involved creating a new frontend page, adding backend models and API endpoints for job applications, and integrating the new sections into the admin panel.
 
-- **Last item agent was working:** The agent was about to start fixing the broken admin dashboard and implementing a new, detailed set of user requirements. This includes fixing image uploads, making theme changes functional, correcting admin access controls, and overhauling the booking system with email confirmations, status tracking, and hourly booking options.
-- **Status:** NOT STARTED
-- **Agent Testing Done:** N
+- **Last item agent was working:** Implementing the Careers page and the Applications tab in the admin dashboard, and expanding the CMS to make more site content dynamic.
+- **Status:** IN PROGRESS
+- **Agent Testing Done:** Y (partially, agent confirmed the  page renders correctly)
 - **Which testing method agent to use?** both
-- **User Testing Done:** Y
+- **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Admin Dashboard is Dysfunctional (P0)**
--   **Issue 2: Incorrect Admin Role-Based Access Control (RBAC) (P1)**
+-   **Issue 1: Incomplete & Buggy Content Management System (P0)**
+-   **Issue 2: Logo Upload Not Implemented (P1)**
 -   **Issue 3: Recurring MongoDB ObjectId Serialization Error (P1)**
 
 **Issues Detail:**
-- **Issue 1: Admin Dashboard is Dysfunctional**
-  - **Description:** Changes made in the admin dashboard, such as updating themes or uploading images for projects and services, do not apply to the main website. Image uploads are broken and display an error icon. Currently, only price changes are working.
-  - **Attempted fixes:** The agent previously overwrote  and  to build a comprehensive dashboard, but the implementation failed to connect the backend logic for file storage and theme management with the frontend display.
-  - **Next debug checklist:**
-    1.  **Image Uploads:**
-        -   Implement a file upload endpoint in  using  to handle .
-        -   Create a directory (e.g., ) to store images.
-        -   Configure FastAPI to serve this directory as static files.
-        -   Modify the  to send image data using  to the new endpoint.
-        -   Ensure frontend pages (, ) construct the correct  URL to display the uploaded images.
-    2.  **Theme Management:**
-        -   Create a new MongoDB collection (e.g., ) to store theme data (colors, gradients).
-        -   Create API endpoints in  for the super admin to update these settings.
-        -   Create a public API endpoint to fetch the current theme settings.
-        -   In the frontend ( or a context), fetch theme settings on load and apply them dynamically, likely by setting CSS variables on the root element.
-  - **Why fix this issue and what will be achieved with the fix?** This is the user's core requirement: to manage the entire website's content and appearance from the admin dashboard without writing any code.
-  - **Status:** NOT STARTED
-  - **Is recurring issue?** N
-  - **Should Test frontend/backend/both after fix?** both
-  - **Blocked on other issue:** None
+- **Issue 1: Incomplete & Buggy Content Management System**
+    - **Description:** The user reported that changes made in the Content tab of the admin dashboard do not persist correctly after saving and reloading. Furthermore, many text elements on the site (e.g., the Professional Audio Post Production subtitle on the homepage, footer text) are still hardcoded and not editable from the admin panel.
+    - **Attempted fixes:** The agent expanded the backend content model and started updating frontend components like the  to use dynamic data. The input lag issue in the content tab was also fixed. However, the work is incomplete.
+    - **Next debug checklist:**
+        1.  Investigate the  update endpoint in  and the  function in  to diagnose why content changes are not persisting reliably.
+        2.  Refactor , , , and other pages to fetch all their text content from the dynamic content API instead of using hardcoded strings.
+        3.  Add fields to the backend  model and the frontend  component for all remaining hardcoded text.
+    - **Why fix this issue and what will be achieved with the fix?** Fulfills the user's core requirement for full, persistent control over all website text from the admin dashboard.
+    - **Status:** IN PROGRESS
+    - **Is recurring issue?** Y
+    - **Should Test frontend/backend/both after fix?** both
+    - **Blocked on other issue:** None
 
-- **Issue 2: Incorrect Admin Role-Based Access Control (RBAC)**
-  - **Description:** The system does not differentiate between a super admin and other admins. The user requires that  is the only super admin with full site-editing capabilities and the ability to manage other admins' permissions. All other admins should default to read-only access for bookings.
-  - **Attempted fixes:** The agent added a  field to the admin model but did not fully implement the granular access control logic on the backend endpoints or the conditional UI on the frontend.
-  - **Next debug checklist:**
-    1.  In , enhance the admin model with distinct roles (, ).
-    2.  Ensure all new admin accounts default to .
-    3.  Protect all critical update/delete endpoints (for themes, services, projects) with a dependency that verifies the user is a .
-    4.  Create an endpoint accessible only by the super admin to update the roles of other admins.
-    5.  In , conditionally render UI elements based on the authenticated admin's role.
-  - **Why fix this issue and what will be achieved with the fix?** To implement the required security model and prevent unauthorized changes to the website.
-  - **Status:** NOT STARTED
-  - **Is recurring issue?** N
-  - **Should Test frontend/backend/both after fix?** both
-  - **Blocked on other issue:** None
+- **Issue 2: Logo Upload Not Implemented**
+    - **Description:** The user requested the ability to upload a logo from their computer/phone. The current implementation in the Content tab only accepts a URL.
+    - **Attempted fixes:** None. The agent implemented the CMS but missed this specific requirement for the logo field.
+    - **Next debug checklist:**
+        1.  In , change the logo input field in the  component from a text input to a file input.
+        2.  Modify the save logic to handle  for the logo upload.
+        3.  Ensure the file is sent to an appropriate backend endpoint (e.g., the existing image upload endpoint) and the returned path is saved in the site content data.
+    - **Why fix this issue and what will be achieved with the fix?** It allows the user to easily change the site logo as requested.
+    - **Status:** NOT STARTED
+    - **Is recurring issue?** N
+    - **Should Test frontend/backend/both after fix?** both
+    - **Blocked on other issue:** None
 
 - **Issue 3: Recurring MongoDB ObjectId Serialization Error**
-  - **Description:** The application has repeatedly thrown 500 errors due to  not being JSON serializable. This was seen in the test reports for the  endpoint.
-  - **Attempted fixes:** The agent and testing agent have made ad-hoc fixes by excluding  from some queries. However, the issue persists, indicating a systemic problem. The agent dismissed the last occurrence as a transient error after a manual  test passed, which was incorrect.
-  - **Next debug checklist:**
-    1.  Review all backend endpoints in  that return data from MongoDB.
-    2.  Create a utility function or Pydantic  config that systematically converts  and  objects to strings for all API responses.
-    3.  Apply this fix to , , and all routes returning lists or single documents (e.g., bookings, projects, services).
-  - **Why fix this issue and what will be achieved with the fix?** To ensure API stability and prevent unexpected 500 errors across the application.
-  - **Status:** NOT STARTED
-  - **Is recurring issue?** Y
-  - **Should Test frontend/backend/both after fix?** backend
-  - **Blocked on other issue:** None
+    - **Description:** The application has a history of 500 errors due to  not being JSON serializable. This is a high risk for any new endpoints.
+    - **Attempted fixes:** Ad-hoc fixes were made in the past. The agent has been more systematic recently, but new endpoints for job applications were just added and need verification.
+    - **Next debug checklist:**
+        1.  Review the new job application endpoints (, etc.) in .
+        2.  Confirm that any data returned from the  collection correctly serializes  to a string, preferably using Pydantic model configurations.
+    - **Why fix this issue and what will be achieved with the fix?** Ensures API stability and prevents critical runtime errors.
+    - **Status:** NOT STARTED (for new endpoints)
+    - **Is recurring issue?** Y
+    - **Should Test frontend/backend/both after fix?** backend
+    - **Blocked on other issue:** None
 
-**In progress Task List**
-None.
+**In progress Task List**:
+- **Task 1: Complete and Test Careers & Applications Flow (P0)**
+    - **Description:** The initial code for the Careers page and Applications tab has been written, but it needs to be made fully dynamic and tested end-to-end.
+    - **Where to resume:**
+        1.  Update  to fetch its text content from the dynamic content API.
+        2.  Perform a full end-to-end test: submit an application via the form, log in as admin, navigate to the Applications tab, and verify the submission is displayed correctly.
+    - **What will be achieved with this?** A fully functional job application system as requested by the user.
+    - **Status:** IN PROGRESS
+    - **Should Test frontend/backend/both after fix?** both
+    - **Blocked on something:** Depends on Issue 1 for dynamic text.
 
 **Upcoming and Future Tasks**
-- **Task 1: Implement Enhanced Booking and Client Tracking Flow (P0)**
-  - **Description:** Overhaul the booking system based on the latest user feedback.
-  - **Sub-tasks:**
-    1.  **Email Confirmation:** Integrate the Resend API into the booking creation endpoint in  to send a confirmation email to the user.
-    2.  **Admin Booking Approval:** Add a  field (e.g., 'Pending', 'Approved', 'Rejected') to the  model. Create endpoints for admins to update this status.
-    3.  **Live Client Tracking:** Create a page for logged-in users () to view their booking history and the live status of each booking.
-    4.  **Post-Booking Signup Prompt:** In , display a modal after a successful booking that prompts the user to sign up or log in to track their booking.
-    5.  **Hourly Booking:** Add a Number of Hours input field to the booking form, visible only when Dubbing or Vocal Recording is selected. Update the backend to store this value.
-    6.  **Additional Charges Info:** Add a text notice on the booking page regarding extra charges for overtime.
-  - **Status:** NOT STARTED
-  - **Should Test frontend/backend/both after fix?** both
+- **Test Booking Confirmed Email Notification (P1):** The backend logic to send an email upon booking approval is in place but has not been tested. This requires an admin to approve a booking and verify the client receives the correct confirmation email.
 
 **Completed work in this session**
-- **Recently completed:**
-  - Initial project scaffolding (FastAPI backend, React frontend).
-  - Creation of a multi-page structure with placeholder content.
-  - Implementation of a glassmorphic UI based on design guidelines.
-  - Updated the color theme to a mint/teal/orange/cyan palette.
-  - Added the company logo to the navigation bar.
-  - Added founder's information and IMDB link to the About page.
-  - Implemented JWT-based authentication for users and admins.
-  - Built a non-functional version of a comprehensive admin dashboard.
-
-**Earlier issues found/mentioned but not fixed**
-All known unfixed issues are captured in the **All Pending/In progress Issue list** section above. The most critical are the dysfunctional admin dashboard and the recurring ObjectId serialization error.
-
-**Known issue recurrence from previous fork**
-- **Issue recurrence in previous fork:** MongoDB  serialization error.
-- **Recurrence count:** At least 2 times.
-- **Status:** NOT STARTED
+- **Admin Dashboard & RBAC:** Fixed broken functionality, implemented dynamic theming, corrected image handling, and established robust role-based access control (super admin vs. basic admin) with suspension capabilities.
+- **Authentication & OTP:** Implemented a full OTP lifecycle: Forgot Password for users/admins, Resend OTP, and a super admin approval flow for new admin registrations.
+- **Booking Flow:** Enhanced the booking page with hourly input for specific services, a cost notice, and a post-booking signup prompt. Modified the email flow to distinguish between an Enquiry Received and a Booking Confirmed.
+- **Content Management System:** Created Content and Contact Info tabs in the admin panel, allowing the super admin to manage most site text, branding colors, and contact details.
+- **Careers Feature:** Created the new  with an application form and added an Applications tab to the admin dashboard, including the necessary backend infrastructure.
+- **UI/UX Fixes:** Resolved an image opacity issue that was making images unclear. Updated  and  to use dynamic content.
 
 **Code Architecture**
 
@@ -140,88 +113,60 @@ All known unfixed issues are captured in the **All Pending/In progress Issue lis
 - **Backend:** FastAPI, Pydantic
 - **Database:** MongoDB
 - **Authentication:** JWT (JSON Web Tokens)
-- **Integrations:** Resend (for email)
-- **UI/UX:** Glassmorphism
+- **CMS:** A custom-built system using a singleton MongoDB document and a dedicated admin interface to manage site-wide text and branding.
+- **Integrations:** Resend
 
 **key DB schema**
-- **users:** 
 - **admins:** 
 - **services:** 
-- **projects:** 
-- **bookings:** 
-- **settings:**  (This needs to be created)
-
-**changes in tech stack**
-None.
+- **site_content:** Singleton document storing all customizable text, logo URL, etc.
+- **contact_info:** Singleton document for contact details.
+- **job_applications:**  (new)
 
 **All files of reference**
-- : The core backend file containing all API logic, database models, and routes. Needs significant updates for file uploads, RBAC, and the new booking flow.
-- : The main frontend file for the admin panel. Needs a complete overhaul to fix broken functionality and add new management features.
-- : Needs updates for the hourly booking option and post-booking signup prompt.
-- : Manages frontend authentication state. May need updates to handle admin roles.
-- : Contains the global styles and theme. Will need to be adapted to support dynamic theming.
-- All other page components under  will be affected by the dynamic theme changes.
-
-**Areas that need refactoring**:
-- **Dynamic Theming:** The current theme is hardcoded in CSS files (, ). This needs to be refactored to use CSS variables that are dynamically populated by fetching settings from the backend.
-- **Backend Error Handling:** The recurring ObjectId serialization issue points to a need for a centralized data serialization strategy in  instead of ad-hoc fixes.
-
-**key api endpoints**
-- : Admin login.
-- : (NEEDS FIX) CRUD for services, including price updates.
-- : (NEEDS FIX) CRUD for projects, including image uploads.
-- : (NEEDS TO BE CREATED) Endpoint for super admin to update site theme.
-- : (NEEDS TO BE CREATED) Endpoint for admin to approve/reject bookings.
-- : Create a new booking. (NEEDS UPDATE for hours and email trigger).
-- : Fetches current user/admin details. (NEEDS ROBUST FIX for ObjectId issue).
-- : (NEEDS TO BE CREATED) Public endpoint to fetch current theme settings.
+- : Contains all API logic, including the new endpoints for job applications and the expanded content management system.
+- : The central hub for all admin functionality, including the new Applications tab and the expanded Content tab.
+- : Needs to be refactored to consume dynamic content from the CMS.
+- : Updated to be fully dynamic.
+- : Updated to be fully dynamic.
+- : New file containing the job application form.
+- : Serves as the provider for all site-wide dynamic content (theme, text, etc.).
+- : Updated with the new  route.
 
 **Critical Info for New Agent**
-- **Highest Priority:** The admin dashboard is the top priority. The user wants full control over the website's content (services, projects, images) and appearance (themes) without touching code. The current implementation is broken and does not save/apply changes correctly.
-- **File Uploads:** The backend lacks a proper file upload and static file serving mechanism. This must be implemented from scratch.
-- **Role-Based Access Control (RBAC):** The distinction between super admin and basic admin is critical and must be implemented with protected backend routes and a conditional frontend UI.
-- **Systemic Bug:** Do not underestimate the recurring MongoDB  serialization error. It requires a systemic fix, likely by creating a Pydantic model configuration or a utility function to properly serialize all data returned from the database. Do not treat it as a transient or one-off issue.
-- **User Feedback is Key:** The user has provided very specific, actionable feedback. Address every point from their last message meticulously. Do not declare success until functionality is verified end-to-end.
-
-**documents and test_reports created in this job**
-- 
-- 
-- 
-- 
+- **Priority 1 is the CMS:** The user's primary goal is full control over the website's content. Fixing the persistence bug and making all remaining text editable (, , etc.) is the top priority.
+- **Don't Forget Logo Upload:** The user has explicitly asked to upload a logo from their computer, not just provide a URL. This is a pending requirement for the CMS.
+- **Test New Endpoints:** The job application feature was just added. It needs a full end-to-end test, from form submission to viewing the application in the admin panel. Pay attention to potential  serialization errors in the new API routes.
+- **Follow the User's Lead:** The user is providing very detailed, iterative feedback. Address all points from their last message before concluding the task.
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User:** 
-2.  **User:** 
-3.  **User:** 
-4.  **User:** 
-5.  **User:** 
+- 
+- 
+- 
+- 
+- 
 
 **Project Health Check:**
 - **Broken:**
-  - Admin Dashboard (all content and theme updates are non-functional)
-  - Image upload functionality
-  - Admin Role-Based Access Control (RBAC)
+  - Content persistence from the admin dashboard is unreliable.
+  - The CMS is incomplete; significant portions of the website's text are still hardcoded.
 - **Mocked:**
-  - All project and service images are hardcoded URLs.
-  - Website theme is static and not manageable from the admin panel.
+  - The logo management feature is incomplete (URL only, no file upload).
 
 **3rd Party Integrations**
-- **Resend:** For sending transactional emails (booking confirmations). API key is available.
-- **OpenAI GPT (via Emergent LLM Key):** Planned for a chatbot feature, but not a current priority.
+- **Resend:** Used for transactional emails. Configuration is in place with an API key.
 
 **Testing status**
 - **Testing agent used after significant changes:** YES
 - **Troubleshoot agent used after agent stuck in loop:** NO
-- **Test files created:** None.
-- **Known regressions:**
-  - Admin functionality was declared complete but is fundamentally broken.
-  - A recurring ObjectId serialization error persists despite previous fix attempts.
+- **Test files created:** Yes, by the testing agent in .
+- **Known regressions:** Content persistence in the CMS is a functional regression.
 
 **Credentials to test flow:**
-- **Super Admin:** leocelestine.s@gmail.com (password needs to be set/retrieved from logs during OTP flow).
+- **Super Admin Email:** 
+- **Super Admin Password:**  (The agent has been resetting this for testing).
 
 **What agent forgot to execute**
-- The agent failed to properly implement and connect the backend logic for the comprehensive admin dashboard it built. It created the UI but did not create the necessary file handling, static file serving, or dynamic theme-setting mechanisms.
-- The agent failed to resolve the root cause of the recurring  serialization error, dismissing it as a transient issue.
-- The agent did not fully implement the granular role-based access control requested by the user, stopping at a superficial implementation.
-- Most of the new features requested in the user's last message (email confirmation, booking tracking, hourly input) were acknowledged but not started.</analysis>
+- The agent did not implement the file upload functionality for the logo, despite the user requesting it multiple times.
+- The agent did not finish refactoring all pages to use the dynamic content system, leaving hardcoded text on the site.
+- The agent has not performed an end-to-end test of the newly created job application flow.</analysis>
