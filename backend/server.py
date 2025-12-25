@@ -1108,6 +1108,92 @@ async def delete_booking(booking_id: str, admin: dict = Depends(get_current_admi
     return {"message": "Booking deleted"}
 
 # =========================
+# JOB APPLICATIONS
+# =========================
+
+@api_router.post("/applications")
+async def submit_application(data: JobApplicationCreate):
+    """Submit a job application (public)"""
+    application = {
+        "id": str(uuid.uuid4()),
+        "name": data.name,
+        "email": data.email,
+        "phone": data.phone,
+        "city": data.city,
+        "position_type": data.position_type,
+        "note": data.note,
+        "portfolio_url": data.portfolio_url,
+        "status": "pending",  # pending, reviewed, contacted, rejected, hired
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.applications.insert_one(application)
+    
+    # Send notification to admin
+    html = f"""
+    <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
+        <h2 style="color: #00d4d4;">New Job Application Received</h2>
+        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0;">
+            <p><strong>Name:</strong> {data.name}</p>
+            <p><strong>Position:</strong> {'Internship' if data.position_type == 'intern' else 'Sound Engineer'}</p>
+            <p><strong>Email:</strong> {data.email}</p>
+            <p><strong>Phone:</strong> {data.phone}</p>
+            <p><strong>City:</strong> {data.city}</p>
+            {f'<p><strong>Portfolio:</strong> <a href="{data.portfolio_url}" style="color: #00d4d4;">{data.portfolio_url}</a></p>' if data.portfolio_url else ''}
+        </div>
+        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px;">
+            <p><strong>Note from Applicant:</strong></p>
+            <p style="color: rgba(255,255,255,0.8);">{data.note}</p>
+        </div>
+    </div>
+    """
+    await send_email(SUPER_ADMIN_EMAIL, f"New Application - {data.position_type.title()} - {data.name}", html)
+    
+    # Send confirmation to applicant
+    applicant_html = f"""
+    <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
+        <h2 style="color: #00d4d4;">Application Received!</h2>
+        <p>Hi {data.name},</p>
+        <p>Thank you for your interest in joining Hogwarts Music Studio! We have received your application for the {'Internship Program' if data.position_type == 'intern' else 'Sound Engineer position'}.</p>
+        <p style="color: rgba(255,255,255,0.6);">Our team will review your application and get back to you soon.</p>
+        <div style="background: rgba(0,212,212,0.1); border-radius: 8px; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0; color: #00d4d4;">Application Reference: {application['id'][:8].upper()}</p>
+        </div>
+    </div>
+    """
+    await send_email(data.email, "Application Received - Hogwarts Music Studio", applicant_html)
+    
+    return {"message": "Application submitted successfully", "id": application["id"]}
+
+@api_router.get("/applications")
+async def get_applications(admin: dict = Depends(get_super_admin)):
+    """Get all job applications (Super admin only)"""
+    applications = await db.applications.find({}, {"_id": 0}).sort("created_at", -1).to_list(200)
+    return applications
+
+@api_router.put("/applications/{app_id}/status")
+async def update_application_status(app_id: str, status: str, admin: dict = Depends(get_super_admin)):
+    """Update application status (Super admin only)"""
+    if status not in ["pending", "reviewed", "contacted", "rejected", "hired"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    result = await db.applications.update_one(
+        {"id": app_id},
+        {"$set": {"status": status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    return {"message": f"Application status updated to {status}"}
+
+@api_router.delete("/applications/{app_id}")
+async def delete_application(app_id: str, admin: dict = Depends(get_super_admin)):
+    """Delete an application (Super admin only)"""
+    result = await db.applications.delete_one({"id": app_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Application not found")
+    return {"message": "Application deleted"}
+
+# =========================
 # CHAT
 # =========================
 
