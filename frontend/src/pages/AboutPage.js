@@ -1,10 +1,28 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Award, Users, Clock, Headphones, Target, ExternalLink, Zap } from 'lucide-react';
+import axios from 'axios';
 
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_audio-haven-21/artifacts/kjwts159_HOGWARTS%20%20white%20bg%20only%20logo%20.jpg";
 
 const AboutPage = () => {
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    fetchContent();
+  }, []);
+
+  const fetchContent = async () => {
+    try {
+      const response = await axios.get(`${API}/settings/content`);
+      setContent(response.data);
+    } catch (error) {
+      console.error('Error fetching content:', error);
+    }
+  };
+
   const values = [
     { icon: Target, title: 'Precision', description: 'Every detail matters. We obsess over audio quality to deliver flawless results.', color: 'cyan' },
     { icon: Headphones, title: 'Immersion', description: 'Creating soundscapes that transport listeners into the heart of every story.', color: 'orange' },
@@ -16,6 +34,12 @@ const AboutPage = () => {
     { year: '2020', title: 'Expansion', description: 'Upgraded to state-of-the-art equipment and expanded services.' },
     { year: '2022', title: 'Growth', description: 'Served 50+ clients including indie filmmakers and production houses.' },
     { year: '2024', title: 'Present', description: 'Full-service audio post-production with cutting-edge technology.' },
+  ];
+
+  const stats = [
+    { value: content?.stat1_value || '6+', label: content?.stat1_label || 'Years Experience' },
+    { value: content?.stat2_value || '50+', label: content?.stat2_label || 'Projects Delivered' },
+    { value: content?.stat3_value || '100%', label: content?.stat3_label || 'Client Satisfaction' },
   ];
 
   return (
