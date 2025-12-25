@@ -441,7 +441,7 @@ async def create_booking(booking: BookingCreate):
     """
     await send_email(ADMIN_EMAIL, f"New Booking - {booking.full_name}", admin_html)
     
-    return {"message": "Booking created successfully", "booking": booking_doc}
+    return {"message": "Booking created successfully", "booking": inserted_booking}
 
 @api_router.get("/bookings", response_model=List[dict])
 async def get_all_bookings(admin: dict = Depends(get_current_admin)):
