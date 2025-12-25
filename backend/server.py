@@ -209,6 +209,13 @@ class SiteContentUpdate(BaseModel):
     founder_bio: Optional[str] = None
     founder_imdb_url: Optional[str] = None
     founder_imdb_text: Optional[str] = None
+    # Stats Section
+    stat1_value: Optional[str] = None
+    stat1_label: Optional[str] = None
+    stat2_value: Optional[str] = None
+    stat2_label: Optional[str] = None
+    stat3_value: Optional[str] = None
+    stat3_label: Optional[str] = None
     # CTA Section
     cta_title: Optional[str] = None
     cta_subtitle: Optional[str] = None
@@ -224,6 +231,16 @@ class SiteContentUpdate(BaseModel):
     careers_job_desc: Optional[str] = None
     careers_form_title: Optional[str] = None
     careers_form_subtitle: Optional[str] = None
+    # Application Form Labels
+    app_name_label: Optional[str] = None
+    app_email_label: Optional[str] = None
+    app_phone_label: Optional[str] = None
+    app_city_label: Optional[str] = None
+    app_instagram_label: Optional[str] = None
+    app_youtube_label: Optional[str] = None
+    app_cv_label: Optional[str] = None
+    app_note_label: Optional[str] = None
+    app_portfolio_label: Optional[str] = None
     # Applications Tab (Admin)
     applications_title: Optional[str] = None
     applications_subtitle: Optional[str] = None
