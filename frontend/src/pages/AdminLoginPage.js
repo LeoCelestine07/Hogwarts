@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, Shield, KeyRound, User } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, Shield, KeyRound, User, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../components/ui/input-otp';
 import { useAuth } from '../context/AuthContext';
@@ -12,15 +12,32 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const AdminLoginPage = () => {
   const navigate = useNavigate();
   const { adminLogin } = useAuth();
-  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'otp'
+  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'otp' | 'forgot' | 'reset'
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
   const [otp, setOtp] = useState('');
+  const [countdown, setCountdown] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    name: ''
+    name: '',
+    newPassword: ''
   });
+
+  // Countdown timer for resend OTP
+  const startCountdown = () => {
+    setCountdown(60);
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,10 +70,27 @@ const AdminLoginPage = () => {
       await axios.post(`${API}/admin/request-otp`, { email: formData.email });
       toast.success('OTP sent to your email!');
       setMode('otp');
+      startCountdown();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to send OTP. Make sure you are using the authorized admin email.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    if (countdown > 0) return;
+    
+    setResending(true);
+    try {
+      await axios.post(`${API}/admin/resend-otp`, { email: formData.email });
+      toast.success('New OTP sent!');
+      setOtp('');
+      startCountdown();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to resend OTP');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -90,6 +124,78 @@ const AdminLoginPage = () => {
     }
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!formData.email) {
+      toast.error('Please enter your email');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await axios.post(`${API}/auth/forgot-password`, { 
+        email: formData.email,
+        user_type: 'admin'
+      });
+      toast.success('Password reset OTP sent!');
+      setMode('reset');
+      startCountdown();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Email not found');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (otp.length !== 6) {
+      toast.error('Please enter complete OTP');
+      return;
+    }
+    if (!formData.newPassword || formData.newPassword.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await axios.post(`${API}/auth/reset-password`, {
+        email: formData.email,
+        otp,
+        new_password: formData.newPassword,
+        user_type: 'admin'
+      });
+      
+      toast.success('Password reset successful! Please login.');
+      setMode('login');
+      setOtp('');
+      setFormData({ ...formData, password: '', newPassword: '' });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Password reset failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendResetOTP = async () => {
+    if (countdown > 0) return;
+    
+    setResending(true);
+    try {
+      await axios.post(`${API}/auth/forgot-password`, { 
+        email: formData.email,
+        user_type: 'admin'
+      });
+      toast.success('New OTP sent!');
+      setOtp('');
+      startCountdown();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to resend OTP');
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center px-6" data-testid="admin-login-page">
       {/* Background */}
@@ -110,13 +216,21 @@ const AdminLoginPage = () => {
               <Shield className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold mb-2">
-              {mode === 'login' ? 'Admin Login' : mode === 'register' ? 'Admin Registration' : 'Verify OTP'}
+              {mode === 'login' ? 'Admin Login' : 
+               mode === 'register' ? 'Admin Registration' : 
+               mode === 'forgot' ? 'Forgot Password' :
+               mode === 'reset' ? 'Reset Password' :
+               'Verify OTP'}
             </h1>
             <p className="text-white/50 text-sm">
               {mode === 'login' 
                 ? 'Sign in to access the admin dashboard' 
                 : mode === 'register' 
                 ? 'Register with authorized email' 
+                : mode === 'forgot'
+                ? 'Enter your email to receive reset OTP'
+                : mode === 'reset'
+                ? 'Enter OTP and new password'
                 : 'Enter the OTP sent to your email'}
             </p>
           </div>
@@ -161,6 +275,17 @@ const AdminLoginPage = () => {
                 </div>
               </div>
 
+              {/* Forgot Password Link */}
+              <div className="text-right">
+                <button
+                  type="button"
+                  onClick={() => setMode('forgot')}
+                  className="text-purple-400 hover:text-purple-300 text-sm"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
               <button
                 type="submit"
                 disabled={loading}
@@ -177,6 +302,127 @@ const AdminLoginPage = () => {
                 )}
               </button>
             </form>
+          )}
+
+          {/* Forgot Password Form */}
+          {mode === 'forgot' && (
+            <form onSubmit={handleForgotPassword} className="space-y-5">
+              <div>
+                <label className="block text-sm text-white/60 mb-2">Admin Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="Enter your registered email"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-5 py-4 text-white placeholder:text-white/30 focus:border-purple-500/50 transition-colors"
+                    data-testid="forgot-email"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-black font-bold hover:scale-[1.02] transition-transform disabled:opacity-50"
+                data-testid="forgot-submit"
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Send Reset OTP
+                    <KeyRound className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+
+          {/* Reset Password with OTP */}
+          {mode === 'reset' && (
+            <div className="space-y-5">
+              <div className="text-center">
+                <p className="text-white/50 text-sm mb-4">
+                  OTP sent to <span className="text-cyan-400">{formData.email}</span>
+                </p>
+                <InputOTP 
+                  maxLength={6} 
+                  value={otp} 
+                  onChange={setOtp}
+                  data-testid="reset-otp-input"
+                >
+                  <InputOTPGroup className="gap-2 justify-center">
+                    {[0, 1, 2, 3, 4, 5].map((i) => (
+                      <InputOTPSlot 
+                        key={i} 
+                        index={i} 
+                        className="w-12 h-14 text-xl bg-white/5 border-white/10 rounded-xl"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+
+                {/* Resend OTP Button */}
+                <div className="mt-4">
+                  {countdown > 0 ? (
+                    <p className="text-white/40 text-sm">Resend OTP in {countdown}s</p>
+                  ) : (
+                    <button
+                      onClick={handleResendResetOTP}
+                      disabled={resending}
+                      className="flex items-center gap-2 mx-auto text-cyan-400 hover:text-cyan-300 text-sm"
+                    >
+                      {resending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-4 h-4" />
+                      )}
+                      Resend OTP
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm text-white/60 mb-2">New Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.newPassword}
+                    onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                    placeholder="Min 6 characters"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-12 py-4 text-white placeholder:text-white/30 focus:border-purple-500/50 transition-colors"
+                    data-testid="reset-new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={handleResetPassword}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-black font-bold hover:scale-[1.02] transition-transform disabled:opacity-50"
+                data-testid="reset-submit"
+              >
+                {loading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <>
+                    Reset Password
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </div>
           )}
 
           {/* Register Form */}
@@ -218,7 +464,7 @@ const AdminLoginPage = () => {
             </form>
           )}
 
-          {/* OTP Verification */}
+          {/* OTP Verification for Registration */}
           {mode === 'otp' && (
             <div className="space-y-5">
               <div className="text-center">
@@ -241,6 +487,26 @@ const AdminLoginPage = () => {
                     ))}
                   </InputOTPGroup>
                 </InputOTP>
+
+                {/* Resend OTP Button */}
+                <div className="mt-4">
+                  {countdown > 0 ? (
+                    <p className="text-white/40 text-sm">Resend OTP in {countdown}s</p>
+                  ) : (
+                    <button
+                      onClick={handleResendOTP}
+                      disabled={resending}
+                      className="flex items-center gap-2 mx-auto text-cyan-400 hover:text-cyan-300 text-sm"
+                    >
+                      {resending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="w-4 h-4" />
+                      )}
+                      Resend OTP
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -299,7 +565,7 @@ const AdminLoginPage = () => {
           )}
 
           {/* Toggle Mode */}
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center space-y-2">
             {mode === 'login' ? (
               <button
                 onClick={() => setMode('register')}
@@ -309,7 +575,7 @@ const AdminLoginPage = () => {
               </button>
             ) : (
               <button
-                onClick={() => { setMode('login'); setOtp(''); }}
+                onClick={() => { setMode('login'); setOtp(''); setCountdown(0); }}
                 className="text-white/40 hover:text-white/60 text-sm"
               >
                 ← Back to Login
