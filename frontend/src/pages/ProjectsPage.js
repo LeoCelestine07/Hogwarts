@@ -116,12 +116,10 @@ const ProjectsPage = () => {
                     {/* Project Image */}
                     <div className="absolute inset-0">
                       <img 
-                        src={project.image_url} 
+                        src={resolveImageUrl(project.image_url, 'project')} 
                         alt={project.name}
                         className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
-                        onError={(e) => {
-                          e.target.src = `https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80`;
-                        }}
+                        onError={(e) => handleImageError(e, 'project')}
                       />
                     </div>
                     
