@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-12-25T14:22:22.971718",
-  "total_tests": 32,
-  "passed_tests": 30,
-  "success_rate": 93.75,
+  "timestamp": "2025-12-25T14:53:01.201192",
+  "total_tests": 33,
+  "passed_tests": 33,
+  "success_rate": 100.0,
   "results": [
     {
       "test": "Root API",
@@ -56,13 +56,18 @@
     },
     {
       "test": "Get Projects",
-      "success": false,
-      "details": "Status: 520 (Expected 200) - Internal Server Error"
+      "success": true,
+      "details": "Status: 200"
     },
     {
       "test": "Projects Count (\u22655)",
-      "success": false,
-      "details": "Found 0 projects"
+      "success": true,
+      "details": "Found 5 projects"
+    },
+    {
+      "test": "Featured Projects (\u22655)",
+      "success": true,
+      "details": "Found 5 featured"
     },
     {
       "test": "User Registration",
@@ -152,7 +157,7 @@
     {
       "test": "Chat Response Content",
       "success": true,
-      "details": "Response length: 607"
+      "details": "Response length: 724"
     },
     {
       "test": "Get User Profile",
