@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Music2, User, LogOut } from 'lucide-react';
+import { Menu, X, User, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_audio-haven-21/artifacts/kjwts159_HOGWARTS%20%20white%20bg%20only%20logo%20.jpg";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,19 +43,23 @@ const Navbar = () => {
       <div
         className={`rounded-full backdrop-blur-xl border transition-all duration-500 ${
           scrolled
-            ? 'bg-black/60 border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
-            : 'bg-black/40 border-white/10'
+            ? 'bg-[#0a1a1f]/80 border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+            : 'bg-[#0a1a1f]/60 border-white/10'
         }`}
       >
-        <div className="px-6 py-4 flex items-center justify-between">
+        <div className="px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link 
             to="/" 
             className="flex items-center gap-2 group"
             data-testid="navbar-logo"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Music2 className="w-5 h-5 text-black" />
+            <div className="w-12 h-12 rounded-lg overflow-hidden bg-white flex items-center justify-center group-hover:scale-110 transition-transform">
+              <img 
+                src={LOGO_URL} 
+                alt="Hogwarts Music Studio" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="font-bold text-lg hidden sm:block">Hogwarts</span>
           </Link>
@@ -108,7 +114,7 @@ const Navbar = () => {
             <Link
               to="/booking"
               data-testid="nav-book-now"
-              className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-semibold text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(0,212,212,0.3)]"
             >
               Book Now
             </Link>
@@ -175,7 +181,7 @@ const Navbar = () => {
                   )}
                   <Link
                     to="/booking"
-                    className="block px-4 py-3 rounded-xl bg-white text-black font-semibold text-sm text-center"
+                    className="block px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-semibold text-sm text-center"
                   >
                     Book Now
                   </Link>
