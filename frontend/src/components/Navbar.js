@@ -1,0 +1,192 @@
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Music2, User, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const { user, isAdmin, logout } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+    { name: 'Projects', path: '/projects' },
+    { name: 'About', path: '/about' },
+  ];
+
+  return (
+    <motion.nav
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-3xl transition-all duration-500 ${
+        scrolled ? 'top-4' : 'top-6'
+      }`}
+    >
+      <div
+        className={`rounded-full backdrop-blur-xl border transition-all duration-500 ${
+          scrolled
+            ? 'bg-black/60 border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)]'
+            : 'bg-black/40 border-white/10'
+        }`}
+      >
+        <div className="px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <Link 
+            to="/" 
+            className="flex items-center gap-2 group"
+            data-testid="navbar-logo"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Music2 className="w-5 h-5 text-black" />
+            </div>
+            <span className="font-bold text-lg hidden sm:block">Hogwarts</span>
+          </Link>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                data-testid={`nav-${item.name.toLowerCase()}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  location.pathname === item.path
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* CTA & Auth */}
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <>
+                <Link
+                  to={isAdmin ? '/admin' : '/dashboard'}
+                  data-testid="nav-dashboard"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                >
+                  <User className="w-4 h-4" />
+                  {user.name?.split(' ')[0]}
+                </Link>
+                <button
+                  onClick={logout}
+                  data-testid="nav-logout"
+                  className="p-2 rounded-full text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                data-testid="nav-login"
+                className="px-4 py-2 rounded-full text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all"
+              >
+                Login
+              </Link>
+            )}
+            <Link
+              to="/booking"
+              data-testid="nav-book-now"
+              className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            >
+              Book Now
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-full hover:bg-white/10 transition-colors"
+            data-testid="mobile-menu-toggle"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden overflow-hidden border-t border-white/10"
+            >
+              <div className="px-6 py-4 space-y-2">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    data-testid={`mobile-nav-${item.name.toLowerCase()}`}
+                    className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                      location.pathname === item.path
+                        ? 'bg-white/10 text-white'
+                        : 'text-white/60 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+                <div className="pt-2 border-t border-white/10 space-y-2">
+                  {user ? (
+                    <>
+                      <Link
+                        to={isAdmin ? '/admin' : '/dashboard'}
+                        className="block px-4 py-3 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5"
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={logout}
+                        className="w-full text-left px-4 py-3 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="block px-4 py-3 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5"
+                    >
+                      Login
+                    </Link>
+                  )}
+                  <Link
+                    to="/booking"
+                    className="block px-4 py-3 rounded-xl bg-white text-black font-semibold text-sm text-center"
+                  >
+                    Book Now
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.nav>
+  );
+};
+
+export default Navbar;
