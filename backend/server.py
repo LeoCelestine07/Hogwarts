@@ -417,7 +417,7 @@ async def create_booking(booking: BookingCreate):
             <p><strong>Service:</strong> {booking.service_name}</p>
             <p><strong>Date:</strong> {booking.preferred_date}</p>
             <p><strong>Time:</strong> {booking.preferred_time}</p>
-            <p><strong>Booking ID:</strong> {booking_doc['id']}</p>
+            <p><strong>Booking ID:</strong> {inserted_booking['id']}</p>
         </div>
         <p style="color: rgba(255,255,255,0.6); font-size: 14px;">We'll contact you shortly to confirm your session.</p>
     </div>
