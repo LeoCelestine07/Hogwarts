@@ -362,18 +362,20 @@ frontend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 5
+  test_sequence: 6
   run_ui: true
 
 test_plan:
   current_focus:
-    - "Content Management - Careers fields"
-    - "Scroll to top on navigation"
-    - "Applications tab in admin"
+    - "Stats section customization"
+    - "Navbar scroll hide/show"
+    - "Mobile navbar visibility"
+    - "Careers form new fields (Instagram, YouTube, CV)"
+    - "Application form labels customization"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
 agent_communication:
   - agent: "main"
-    message: "Implemented: 1) ScrollToTop component for automatic scroll on navigation, 2) Added careers_* and applications_* fields to backend SiteContentUpdate model, 3) Added Careers Page and Applications Tab sections in ContentManagement admin panel, 4) Updated HomePage to use dynamic content for badges, titles, subtitles. Admin credentials: leocelestine.s@gmail.com / Admin123!"
+    message: "Implemented: 1) Stats section on About page now customizable (stat1_value, stat1_label, stat2_*, stat3_*), 2) Navbar hide/show on scroll (hides on fast scroll down, shows on scroll up), 3) Fixed mobile navbar visibility issue (hamburger menu now visible), 4) Added new fields to Careers form: Instagram ID, 3 YouTube links, CV upload. 5) Added Application Form Labels section in admin Content tab for customizing all form field labels. Admin credentials: leocelestine.s@gmail.com / Admin123!"
