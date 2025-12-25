@@ -5,17 +5,19 @@
 @tailwind utilities;
 
 :root {
-  --bg-default: #030305;
-  --bg-secondary: #0a0a12;
-  --glass-surface: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: rgba(255, 255, 255, 0.15);
-  --accent-cyan: #00f0ff;
-  --accent-purple: #bc13fe;
-  --accent-indigo: #4f46e5;
+  --bg-default: #0a1a1f;
+  --bg-secondary: #0d2229;
+  --glass-surface: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.2);
+  --accent-cyan: #00d4d4;
+  --accent-teal: #14b8a6;
+  --accent-orange: #f97316;
+  --accent-mint: #10b981;
+  --accent-amber: #fbbf24;
   --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.6);
-  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
 }
 
 * {
@@ -51,30 +53,43 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-heavy {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .glass-subtle {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Glow effects */
+/* Glow effects - updated to new colors */
 .glow-cyan {
-  box-shadow: 0 0 40px -10px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 40px -10px rgba(0, 212, 212, 0.4);
 }
 
-.glow-purple {
-  box-shadow: 0 0 40px -10px rgba(188, 19, 254, 0.3);
+.glow-orange {
+  box-shadow: 0 0 40px -10px rgba(249, 115, 22, 0.4);
 }
 
+.glow-teal {
+  box-shadow: 0 0 40px -10px rgba(20, 184, 166, 0.4);
+}
+
+/* Text gradient - cyan to orange */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mint gradient text */
+.text-gradient-mint {
+  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-teal) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -85,17 +100,17 @@ h1, h2, h3, h4, h5, h6 {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
 
-/* Mesh gradient background */
+/* Mesh gradient background - teal/cyan theme */
 .mesh-gradient {
   background: 
-    radial-gradient(ellipse at 20% 30%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 70%, rgba(188, 19, 254, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+    radial-gradient(ellipse at 20% 30%, rgba(20, 184, 166, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 212, 212, 0.08) 0%, transparent 70%);
 }
 
 /* Floating animation */
@@ -108,10 +123,20 @@ h1, h2, h3, h4, h5, h6 {
   animation: float 6s ease-in-out infinite;
 }
 
+/* Lightning flash animation */
+@keyframes lightning {
+  0%, 90%, 100% { opacity: 0; }
+  92%, 95% { opacity: 1; }
+}
+
+.animate-lightning {
+  animation: lightning 5s ease-in-out infinite;
+}
+
 /* Pulse glow animation */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px -5px rgba(0, 240, 255, 0.3); }
-  50% { box-shadow: 0 0 40px -5px rgba(0, 240, 255, 0.5); }
+  0%, 100% { box-shadow: 0 0 20px -5px rgba(0, 212, 212, 0.3); }
+  50% { box-shadow: 0 0 40px -5px rgba(0, 212, 212, 0.5); }
 }
 
 .animate-pulse-glow {
@@ -138,7 +163,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Selection */
 ::selection {
-  background: var(--accent-purple);
+  background: var(--accent-orange);
   color: white;
 }
 
@@ -146,7 +171,7 @@ h1, h2, h3, h4, h5, h6 {
 input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--accent-cyan) !important;
-  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(0, 212, 212, 0.2);
 }
 
 /* Button base */
@@ -189,31 +214,36 @@ input:focus, textarea:focus, select:focus {
 .card-hover:hover {
   transform: translateY(-8px);
   border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 40px -10px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 40px -10px rgba(0, 212, 212, 0.3);
 }
 
-/* Shadcn overrides for dark theme */
+/* Orange card hover */
+.card-hover-orange:hover {
+  box-shadow: 0 0 40px -10px rgba(249, 115, 22, 0.4);
+}
+
+/* Shadcn overrides for dark teal theme */
 @layer base {
   :root {
-    --background: 0 0% 1%;
+    --background: 190 40% 8%;
     --foreground: 0 0% 100%;
-    --card: 0 0% 2%;
+    --card: 190 40% 10%;
     --card-foreground: 0 0% 100%;
-    --popover: 0 0% 3%;
+    --popover: 190 40% 12%;
     --popover-foreground: 0 0% 100%;
-    --primary: 186 100% 50%;
+    --primary: 180 100% 41%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 10%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 280 100% 55%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 25 95% 53%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 186 100% 50%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 180 100% 41%;
     --radius: 0.75rem;
   }
 }
