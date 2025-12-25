@@ -460,13 +460,11 @@ class HogwartsAPITester:
             
             # Test other status updates
             for status in ['rejected', 'pending']:
-                status_update = {"status": status}
                 updated = self.run_test(
                     f"Update Application Status to {status.title()}",
                     "PUT",
-                    f"applications/{app_id}/status",
-                    200,
-                    data=status_update
+                    f"applications/{app_id}/status?status={status}",
+                    200
                 )
                 
                 if updated and updated.get('status') == status:
