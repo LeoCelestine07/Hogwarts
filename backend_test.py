@@ -1,49 +1,44 @@
 #!/usr/bin/env python3
-"""
-Hogwarts Music Studio - Backend API Testing
-Tests all API endpoints for functionality and integration
-"""
 
 import requests
 import sys
 import json
-from datetime import datetime, timedelta
-import uuid
+from datetime import datetime
 
 class HogwartsAPITester:
-    def __init__(self, base_url="https://glassmorphic-hub-1.preview.emergentagent.com"):
+    def __init__(self, base_url="https://glassmorphic-hub-1.preview.emergentagent.com/api"):
         self.base_url = base_url
-        self.api_url = f"{base_url}/api"
         self.token = None
-        self.admin_token = None
         self.tests_run = 0
         self.tests_passed = 0
-        self.test_results = []
+        self.results = []
 
-    def log_test(self, name, success, details=""):
+    def log_result(self, test_name, success, details="", expected_status=None, actual_status=None):
         """Log test result"""
         self.tests_run += 1
         if success:
             self.tests_passed += 1
-            print(f"✅ {name}")
+            print(f"✅ {test_name}")
         else:
-            print(f"❌ {name} - {details}")
+            print(f"❌ {test_name} - {details}")
+            if expected_status and actual_status:
+                print(f"   Expected: {expected_status}, Got: {actual_status}")
         
-        self.test_results.append({
-            "test": name,
+        self.results.append({
+            "test": test_name,
             "success": success,
-            "details": details
+            "details": details,
+            "expected_status": expected_status,
+            "actual_status": actual_status
         })
 
     def run_test(self, name, method, endpoint, expected_status, data=None, headers=None):
         """Run a single API test"""
-        url = f"{self.api_url}/{endpoint}"
+        url = f"{self.base_url}/{endpoint}"
         test_headers = {'Content-Type': 'application/json'}
-        
         if headers:
             test_headers.update(headers)
-        
-        if self.token and 'Authorization' not in test_headers:
+        if self.token:
             test_headers['Authorization'] = f'Bearer {self.token}'
 
         try:
@@ -57,17 +52,15 @@ class HogwartsAPITester:
                 response = requests.delete(url, headers=test_headers, timeout=10)
 
             success = response.status_code == expected_status
-            details = f"Status: {response.status_code}"
-            
+            details = ""
             if not success:
-                details += f" (Expected {expected_status})"
                 try:
                     error_data = response.json()
-                    details += f" - {error_data.get('detail', 'Unknown error')}"
+                    details = error_data.get('detail', 'Unknown error')
                 except:
-                    details += f" - {response.text[:100]}"
+                    details = response.text[:100]
 
-            self.log_test(name, success, details)
+            self.log_result(name, success, details, expected_status, response.status_code)
             
             if success:
                 try:
@@ -77,206 +70,245 @@ class HogwartsAPITester:
             return None
 
         except Exception as e:
-            self.log_test(name, False, f"Error: {str(e)}")
+            self.log_result(name, False, f"Exception: {str(e)}")
             return None
 
-    def test_root_endpoint(self):
-        """Test root API endpoint"""
-        return self.run_test("Root API", "GET", "", 200)
+    def test_admin_login(self):
+        """Test admin login with provided credentials"""
+        print("\n🔐 Testing Admin Authentication...")
+        response = self.run_test(
+            "Admin Login",
+            "POST",
+            "admin/login",
+            200,
+            data={"email": "leocelestine.s@gmail.com", "password": "Admin123!"}
+        )
+        if response and 'token' in response:
+            self.token = response['token']
+            return True
+        return False
 
-    def test_services_endpoint(self):
-        """Test services endpoint"""
-        services = self.run_test("Get Services", "GET", "services", 200)
-        if services and len(services) >= 6:
-            self.log_test("Services Count (≥6)", True, f"Found {len(services)} services")
+    def test_stats_section_cms(self):
+        """Test Stats Section CMS functionality"""
+        print("\n📊 Testing Stats Section CMS...")
+        
+        # Get current content
+        content = self.run_test(
+            "Get Site Content",
+            "GET", 
+            "settings/content",
+            200
+        )
+        
+        if content:
+            # Check if stats fields exist
+            stats_fields = ['stat1_value', 'stat1_label', 'stat2_value', 'stat2_label', 'stat3_value', 'stat3_label']
+            missing_fields = []
+            for field in stats_fields:
+                if field not in content:
+                    missing_fields.append(field)
             
-            # Check for required services
-            service_names = [s.get('name', '') for s in services]
-            required_services = ['Dubbing', 'Vocal Recording', 'Mixing', 'Mastering', 'SFX & Foley', 'Music Production']
-            
-            for req_service in required_services:
-                if req_service in service_names:
-                    self.log_test(f"Service: {req_service}", True)
-                else:
-                    self.log_test(f"Service: {req_service}", False, "Missing")
-            
-            # Check dubbing pricing
-            dubbing = next((s for s in services if s.get('name') == 'Dubbing'), None)
-            if dubbing and dubbing.get('price') == '₹299/hr':
-                self.log_test("Dubbing Fixed Price", True, "₹299/hr")
+            if missing_fields:
+                self.log_result("Stats Section Fields Present", False, f"Missing fields: {missing_fields}")
             else:
-                self.log_test("Dubbing Fixed Price", False, f"Expected ₹299/hr, got {dubbing.get('price') if dubbing else 'Service not found'}")
+                self.log_result("Stats Section Fields Present", True)
                 
-        else:
-            self.log_test("Services Count (≥6)", False, f"Found {len(services) if services else 0} services")
-        
-        return services
+                # Test updating stats
+                update_data = {
+                    "stat1_value": "7+",
+                    "stat1_label": "Years Experience",
+                    "stat2_value": "60+", 
+                    "stat2_label": "Projects Delivered",
+                    "stat3_value": "100%",
+                    "stat3_label": "Client Satisfaction"
+                }
+                
+                updated = self.run_test(
+                    "Update Stats Section",
+                    "PUT",
+                    "settings/content",
+                    200,
+                    data=update_data
+                )
+                
+                if updated:
+                    # Verify the update
+                    for key, value in update_data.items():
+                        if updated.get(key) == value:
+                            self.log_result(f"Stats Field {key} Updated", True)
+                        else:
+                            self.log_result(f"Stats Field {key} Updated", False, f"Expected {value}, got {updated.get(key)}")
 
-    def test_projects_endpoint(self):
-        """Test projects endpoint"""
-        projects = self.run_test("Get Projects", "GET", "projects", 200)
-        if projects and len(projects) >= 5:
-            self.log_test("Projects Count (≥5)", True, f"Found {len(projects)} projects")
-            
-            # Check featured projects
-            featured_count = sum(1 for p in projects if p.get('featured', False))
-            if featured_count >= 5:
-                self.log_test("Featured Projects (≥5)", True, f"Found {featured_count} featured")
-            else:
-                self.log_test("Featured Projects (≥5)", False, f"Found {featured_count} featured")
-        else:
-            self.log_test("Projects Count (≥5)", False, f"Found {len(projects) if projects else 0} projects")
+    def test_application_form_labels_cms(self):
+        """Test Application Form Labels CMS functionality"""
+        print("\n📝 Testing Application Form Labels CMS...")
         
-        return projects
-
-    def test_user_registration(self):
-        """Test user registration"""
-        test_email = f"test_{uuid.uuid4().hex[:8]}@example.com"
-        user_data = {
-            "name": "Test User",
-            "email": test_email,
-            "password": "TestPass123!"
+        # Test updating application form labels
+        form_labels = {
+            "app_name_label": "Full Name *",
+            "app_email_label": "Email Address *", 
+            "app_phone_label": "Phone Number *",
+            "app_city_label": "City *",
+            "app_instagram_label": "Instagram ID (optional)",
+            "app_youtube_label": "YouTube Links (optional)",
+            "app_cv_label": "Upload CV/Resume (optional)",
+            "app_note_label": "Tell us about yourself *",
+            "app_portfolio_label": "Portfolio Link (optional)"
         }
         
-        result = self.run_test("User Registration", "POST", "auth/register", 200, user_data)
-        if result and 'token' in result:
-            self.token = result['token']
-            self.log_test("User Token Generated", True)
-            return result
-        else:
-            self.log_test("User Token Generated", False, "No token in response")
-            return None
+        updated = self.run_test(
+            "Update Application Form Labels",
+            "PUT",
+            "settings/content", 
+            200,
+            data=form_labels
+        )
+        
+        if updated:
+            for key, value in form_labels.items():
+                if updated.get(key) == value:
+                    self.log_result(f"Form Label {key} Updated", True)
+                else:
+                    self.log_result(f"Form Label {key} Updated", False, f"Expected {value}, got {updated.get(key)}")
 
-    def test_user_login(self):
-        """Test user login with existing user"""
-        if not self.token:
-            self.log_test("User Login", False, "No user registered for login test")
-            return None
-            
-        # We'll skip login test since we already have token from registration
-        self.log_test("User Login", True, "Skipped - using registration token")
-        return {"token": self.token}
-
-    def test_booking_creation(self):
-        """Test booking creation (no auth required)"""
-        services = self.test_services_endpoint()
-        if not services:
-            self.log_test("Booking Creation", False, "No services available")
-            return None
-            
-        service = services[0]
-        booking_data = {
-            "full_name": "Test Booking User",
-            "email": f"booking_{uuid.uuid4().hex[:8]}@example.com",
+    def test_job_application_with_new_fields(self):
+        """Test job application with Instagram, YouTube links, and CV upload"""
+        print("\n💼 Testing Enhanced Job Application...")
+        
+        # Test job application with new fields
+        application_data = {
+            "name": "Test Applicant",
+            "email": "test@example.com",
             "phone": "+91 9876543210",
-            "service_id": service['id'],
-            "service_name": service['name'],
-            "description": "Test booking for automated testing",
-            "preferred_date": (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d"),
-            "preferred_time": "10:00 AM"
+            "city": "Mumbai",
+            "position_type": "intern",
+            "note": "I am passionate about audio engineering and would love to learn from your team.",
+            "portfolio_url": "https://portfolio.example.com",
+            "instagram_id": "@testuser",
+            "youtube_link1": "https://youtube.com/watch?v=test1",
+            "youtube_link2": "https://youtube.com/watch?v=test2", 
+            "youtube_link3": "https://youtube.com/watch?v=test3",
+            "cv_filename": "test_cv.pdf"
         }
         
-        # Remove auth header for booking
-        result = self.run_test("Booking Creation", "POST", "bookings", 200, booking_data, {"Authorization": ""})
-        if result and 'booking' in result:
-            self.log_test("Booking Response Format", True)
-            return result
-        else:
-            self.log_test("Booking Response Format", False, "Missing booking in response")
-            return None
-
-    def test_admin_otp_request(self):
-        """Test admin OTP request"""
-        otp_data = {"email": "leocelestine.s@gmail.com"}
-        result = self.run_test("Admin OTP Request", "POST", "admin/request-otp", 200, otp_data, {"Authorization": ""})
-        return result
-
-    def test_chat_endpoint(self):
-        """Test AI chat endpoint"""
-        chat_data = {
-            "message": "What services do you offer?",
-            "session_id": str(uuid.uuid4())
-        }
+        response = self.run_test(
+            "Submit Job Application with New Fields",
+            "POST",
+            "applications",
+            200,
+            data=application_data
+        )
         
-        result = self.run_test("AI Chat", "POST", "chat", 200, chat_data, {"Authorization": ""})
-        if result and 'response' in result:
-            self.log_test("Chat Response Format", True)
-            if len(result['response']) > 10:
-                self.log_test("Chat Response Content", True, f"Response length: {len(result['response'])}")
-            else:
-                self.log_test("Chat Response Content", False, "Response too short")
-        else:
-            self.log_test("Chat Response Format", False, "Missing response field")
-        
-        return result
+        if response:
+            self.log_result("Job Application Submission", True)
+            return response.get('id')
+        return None
 
-    def test_protected_endpoints(self):
-        """Test endpoints that require authentication"""
-        if not self.token:
-            self.log_test("Protected Endpoints", False, "No auth token available")
-            return
+    def test_cv_upload_endpoint(self):
+        """Test CV upload endpoint"""
+        print("\n📄 Testing CV Upload Endpoint...")
+        
+        # Test CV upload endpoint exists (we can't actually upload without file)
+        # But we can test the endpoint responds correctly to missing file
+        try:
+            url = f"{self.base_url}/upload/cv"
+            response = requests.post(url, timeout=10)
             
-        # Test user profile
-        self.run_test("Get User Profile", "GET", "auth/me", 200)
+            # Should return 422 for missing file, not 404
+            if response.status_code == 422:
+                self.log_result("CV Upload Endpoint Exists", True, "Endpoint responds correctly to missing file")
+            elif response.status_code == 404:
+                self.log_result("CV Upload Endpoint Exists", False, "Endpoint not found")
+            else:
+                self.log_result("CV Upload Endpoint Exists", True, f"Endpoint exists (status: {response.status_code})")
+                
+        except Exception as e:
+            self.log_result("CV Upload Endpoint Exists", False, f"Exception: {str(e)}")
+
+    def test_admin_applications_access(self):
+        """Test admin access to job applications"""
+        print("\n👨‍💼 Testing Admin Applications Access...")
         
-        # Test user bookings
-        self.run_test("Get User Bookings", "GET", "bookings/user", 200)
+        applications = self.run_test(
+            "Get Job Applications (Admin)",
+            "GET",
+            "applications",
+            200
+        )
+        
+        if applications is not None:
+            self.log_result("Admin Applications Access", True, f"Found {len(applications)} applications")
+            
+            # Check if applications have the new fields
+            if applications:
+                app = applications[0]
+                new_fields = ['instagram_id', 'youtube_link1', 'youtube_link2', 'youtube_link3', 'cv_filename']
+                for field in new_fields:
+                    if field in app:
+                        self.log_result(f"Application Field {field} Present", True)
+                    else:
+                        self.log_result(f"Application Field {field} Present", False, "Field missing in application data")
+
+    def test_general_api_health(self):
+        """Test general API health"""
+        print("\n🏥 Testing General API Health...")
+        
+        # Test basic endpoints
+        endpoints = [
+            ("Get Services", "GET", "services", 200),
+            ("Get Projects", "GET", "projects", 200),
+            ("Get Site Content", "GET", "settings/content", 200),
+            ("Get Contact Info", "GET", "settings/contact", 200)
+        ]
+        
+        for name, method, endpoint, expected_status in endpoints:
+            self.run_test(name, method, endpoint, expected_status)
 
     def run_all_tests(self):
-        """Run all backend tests"""
-        print("🚀 Starting Hogwarts Music Studio Backend Tests")
-        print("=" * 60)
+        """Run all tests"""
+        print("🎵 Starting Hogwarts Music Studio API Tests...")
+        print(f"Testing against: {self.base_url}")
         
-        # Basic API tests
-        self.test_root_endpoint()
+        # Test admin login first
+        if not self.test_admin_login():
+            print("❌ Admin login failed - skipping admin-only tests")
+            
+        # Test general API health
+        self.test_general_api_health()
         
-        # Core functionality tests
-        services = self.test_services_endpoint()
-        projects = self.test_projects_endpoint()
+        # Test new CMS features
+        if self.token:
+            self.test_stats_section_cms()
+            self.test_application_form_labels_cms()
+            self.test_admin_applications_access()
         
-        # User authentication tests
-        self.test_user_registration()
-        self.test_user_login()
-        
-        # Booking tests
-        self.test_booking_creation()
-        
-        # Admin tests
-        self.test_admin_otp_request()
-        
-        # AI Chat tests
-        self.test_chat_endpoint()
-        
-        # Protected endpoint tests
-        self.test_protected_endpoints()
+        # Test job application features (public endpoints)
+        self.test_job_application_with_new_fields()
+        self.test_cv_upload_endpoint()
         
         # Print summary
-        print("\n" + "=" * 60)
-        print(f"📊 Test Results: {self.tests_passed}/{self.tests_run} passed")
-        success_rate = (self.tests_passed / self.tests_run * 100) if self.tests_run > 0 else 0
-        print(f"📈 Success Rate: {success_rate:.1f}%")
+        print(f"\n📊 Test Summary:")
+        print(f"Tests Run: {self.tests_run}")
+        print(f"Tests Passed: {self.tests_passed}")
+        print(f"Success Rate: {(self.tests_passed/self.tests_run*100):.1f}%")
         
-        if success_rate < 80:
-            print("⚠️  Warning: Low success rate detected")
-            
+        # Save detailed results
+        results_data = {
+            "timestamp": datetime.now().isoformat(),
+            "summary": {
+                "tests_run": self.tests_run,
+                "tests_passed": self.tests_passed,
+                "success_rate": f"{(self.tests_passed/self.tests_run*100):.1f}%"
+            },
+            "detailed_results": self.results
+        }
+        
+        with open('/app/test_reports/backend_test_results.json', 'w') as f:
+            json.dump(results_data, f, indent=2)
+        
         return self.tests_passed == self.tests_run
 
-def main():
-    """Main test execution"""
+if __name__ == "__main__":
     tester = HogwartsAPITester()
     success = tester.run_all_tests()
-    
-    # Save detailed results
-    with open('/app/test_reports/backend_test_results.json', 'w') as f:
-        json.dump({
-            "timestamp": datetime.now().isoformat(),
-            "total_tests": tester.tests_run,
-            "passed_tests": tester.tests_passed,
-            "success_rate": (tester.tests_passed / tester.tests_run * 100) if tester.tests_run > 0 else 0,
-            "results": tester.test_results
-        }, f, indent=2)
-    
-    return 0 if success else 1
-
-if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(0 if success else 1)
