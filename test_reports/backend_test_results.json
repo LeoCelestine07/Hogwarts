@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-12-25T19:49:39.478766",
+  "timestamp": "2025-12-25T20:10:10.403302",
   "summary": {
-    "tests_run": 34,
-    "tests_passed": 29,
-    "success_rate": "85.3%"
+    "tests_run": 22,
+    "tests_passed": 20,
+    "success_rate": "90.9%"
   },
   "detailed_results": [
     {
@@ -49,58 +49,23 @@
       "actual_status": 200
     },
     {
-      "test": "Stats Section Fields Present",
-      "success": true,
-      "details": "",
+      "test": "Services Page Fields Present",
+      "success": false,
+      "details": "Missing fields: ['services_page_badge', 'services_page_title', 'services_page_title_gradient', 'services_page_subtitle', 'services_cta_title', 'services_cta_subtitle', 'services_cta_button']",
       "expected_status": null,
       "actual_status": null
     },
     {
-      "test": "Update Stats Section",
+      "test": "Get Site Content",
       "success": true,
       "details": "",
       "expected_status": 200,
       "actual_status": 200
     },
     {
-      "test": "Stats Field stat1_value Updated",
-      "success": true,
-      "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Stats Field stat1_label Updated",
-      "success": true,
-      "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Stats Field stat2_value Updated",
-      "success": true,
-      "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Stats Field stat2_label Updated",
-      "success": true,
-      "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Stats Field stat3_value Updated",
-      "success": true,
-      "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Stats Field stat3_label Updated",
-      "success": true,
-      "details": "",
+      "test": "About Page Fields Present",
+      "success": false,
+      "details": "Missing fields: ['about_page_badge', 'about_page_title', 'about_page_title_gradient', 'about_page_description', 'about_philosophy_title', 'about_philosophy_text', 'about_feature1', 'about_feature2', 'about_feature3', 'about_values_badge', 'about_values_title', 'about_journey_badge', 'about_journey_title', 'about_cta_title', 'about_cta_title_gradient', 'about_cta_subtitle', 'about_cta_button']",
       "expected_status": null,
       "actual_status": null
     },
@@ -171,55 +136,6 @@
       "test": "Form Label app_portfolio_label Updated",
       "success": true,
       "details": "",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Get Job Applications (Admin)",
-      "success": true,
-      "details": "",
-      "expected_status": 200,
-      "actual_status": 200
-    },
-    {
-      "test": "Admin Applications Access",
-      "success": true,
-      "details": "Found 3 applications",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Application Field instagram_id Present",
-      "success": false,
-      "details": "Field missing in application data",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Application Field youtube_link1 Present",
-      "success": false,
-      "details": "Field missing in application data",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Application Field youtube_link2 Present",
-      "success": false,
-      "details": "Field missing in application data",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Application Field youtube_link3 Present",
-      "success": false,
-      "details": "Field missing in application data",
-      "expected_status": null,
-      "actual_status": null
-    },
-    {
-      "test": "Application Field cv_filename Present",
-      "success": false,
-      "details": "Field missing in application data",
       "expected_status": null,
       "actual_status": null
     },
