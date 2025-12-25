@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-12-25T20:30:03.100637",
+  "timestamp": "2025-12-25T20:30:30.199702",
   "summary": {
-    "tests_run": 88,
-    "tests_passed": 80,
-    "success_rate": "90.9%"
+    "tests_run": 89,
+    "tests_passed": 84,
+    "success_rate": "94.4%"
   },
   "detailed_results": [
     {
@@ -519,8 +519,15 @@
     },
     {
       "test": "Application Status Updated to Hired",
-      "success": false,
-      "details": "Status not updated correctly: None",
+      "success": true,
+      "details": "",
+      "expected_status": null,
+      "actual_status": null
+    },
+    {
+      "test": "Email Trigger for Hired Status",
+      "success": true,
+      "details": "API call successful - email should be sent",
       "expected_status": null,
       "actual_status": null
     },
@@ -533,7 +540,7 @@
     },
     {
       "test": "Application Status Updated to Rejected",
-      "success": false,
+      "success": true,
       "details": "",
       "expected_status": null,
       "actual_status": null
@@ -547,7 +554,7 @@
     },
     {
       "test": "Application Status Updated to Pending",
-      "success": false,
+      "success": true,
       "details": "",
       "expected_status": null,
       "actual_status": null
@@ -562,7 +569,7 @@
     {
       "test": "Admin Applications Access",
       "success": true,
-      "details": "Found 10 applications",
+      "details": "Found 12 applications",
       "expected_status": null,
       "actual_status": null
     },
