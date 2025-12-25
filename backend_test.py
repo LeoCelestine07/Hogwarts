@@ -442,14 +442,11 @@ class HogwartsAPITester:
             app_id = app_response['id']
             
             # Test updating status to 'hired' (should trigger email)
-            status_update = {"status": "hired"}
-            
             updated = self.run_test(
                 "Update Application Status to Hired",
                 "PUT",
-                f"applications/{app_id}/status",
-                200,
-                data=status_update
+                f"applications/{app_id}/status?status=hired",
+                200
             )
             
             if updated:
