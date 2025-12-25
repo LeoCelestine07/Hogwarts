@@ -1838,6 +1838,8 @@ const AdminDashboard = () => {
             )}
             {isSuperAdmin && (
               <>
+                <Route path="content" element={<ContentManagement />} />
+                <Route path="contact" element={<ContactManagement />} />
                 <Route path="settings" element={<SiteSettings />} />
                 <Route path="admins" element={<AdminManagement />} />
               </>
