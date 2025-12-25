@@ -74,6 +74,16 @@ class AdminLogin(BaseModel):
     email: EmailStr
     password: str
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+    user_type: str = "admin"  # "admin" or "user"
+
+class ResetPasswordVerify(BaseModel):
+    email: EmailStr
+    otp: str
+    new_password: str
+    user_type: str = "admin"
+
 class ServiceCreate(BaseModel):
     name: str
     description: str
