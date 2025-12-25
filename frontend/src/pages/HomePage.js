@@ -260,9 +260,10 @@ const HomePage = () => {
               >
                 {/* Project image */}
                 <img 
-                  src={project.image_url} 
+                  src={resolveImageUrl(project.image_url, 'project')} 
                   alt={project.name}
                   className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700"
+                  onError={(e) => handleImageError(e, 'project')}
                 />
                 
                 {/* Overlay gradient */}
