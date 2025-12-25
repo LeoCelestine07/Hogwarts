@@ -2759,6 +2759,7 @@ const AdminDashboard = () => {
               </Link>
             ))}
           </div>
+          </div>
 
           <div className="absolute bottom-6 left-6 right-6">
             <div className="glass rounded-xl p-4 border border-white/10 mb-4">
