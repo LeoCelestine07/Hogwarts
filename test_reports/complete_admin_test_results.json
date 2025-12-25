@@ -1,0 +1,69 @@
+{
+  "timestamp": "2025-12-25T14:23:56.012201",
+  "total_tests": 12,
+  "passed_tests": 6,
+  "success_rate": 50.0,
+  "results": [
+    {
+      "test": "Root API",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Services Endpoint",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Services Count",
+      "success": true,
+      "details": "Found 6 services"
+    },
+    {
+      "test": "Projects Endpoint",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Projects Count",
+      "success": true,
+      "details": "Found 5 projects"
+    },
+    {
+      "test": "Admin OTP Request",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Admin Login (admin123)",
+      "success": false,
+      "details": "Status: 401 (Expected 200) - Invalid credentials"
+    },
+    {
+      "test": "Admin Login (password)",
+      "success": false,
+      "details": "Status: 401 (Expected 200) - Invalid credentials"
+    },
+    {
+      "test": "Admin Login (hogwarts123)",
+      "success": false,
+      "details": "Status: 401 (Expected 200) - Invalid credentials"
+    },
+    {
+      "test": "Admin Login (admin)",
+      "success": false,
+      "details": "Status: 401 (Expected 200) - Invalid credentials"
+    },
+    {
+      "test": "Admin Login (test123)",
+      "success": false,
+      "details": "Status: 401 (Expected 200) - Invalid credentials"
+    },
+    {
+      "test": "Admin Login",
+      "success": false,
+      "details": "No valid password found"
+    }
+  ],
+  "admin_token_obtained": false
+}
