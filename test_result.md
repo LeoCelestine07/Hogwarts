@@ -102,16 +102,52 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Build a full-stack, multi-page modern web application for Hogwarts Music Studio with admin dashboard that allows full website control including image uploads, theme management, and booking management"
+user_problem_statement: "Build a full-stack, multi-page modern web application for Hogwarts Music Studio with admin dashboard, OTP-based auth with forgot password, booking with hours selection, and user dashboard for tracking"
 
 backend:
-  - task: "Image Upload API"
+  - task: "Forgot Password API"
     implemented: true
     working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "POST /api/auth/forgot-password sends OTP to email. POST /api/auth/reset-password verifies OTP and updates password."
+
+  - task: "Resend OTP API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "POST /api/admin/resend-otp sends new OTP for admin registration."
+
+  - task: "Booking with Hours"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Booking model now includes 'hours' field. Frontend shows hours selection for Dubbing and Vocal Recording services."
+
+  - task: "Image Upload API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
     status_history:
       - working: true
         agent: "main"
