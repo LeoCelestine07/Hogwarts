@@ -282,34 +282,33 @@ async def send_email(to: str, subject: str, html: str):
         return None
 
 async def send_booking_confirmation(booking: dict):
+    """Send initial enquiry confirmation - NOT booking confirmation"""
     html = f"""
     <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a1a1f 0%, #0d2229 100%); color: white; border-radius: 16px; overflow: hidden;">
-        <div style="background: linear-gradient(135deg, #00d4d4 0%, #14b8a6 100%); padding: 30px; text-align: center;">
-            <h1 style="margin: 0; color: black; font-size: 28px;">Booking Confirmed!</h1>
+        <div style="background: linear-gradient(135deg, #f97316 0%, #fbbf24 100%); padding: 30px; text-align: center;">
+            <h1 style="margin: 0; color: black; font-size: 28px;">Enquiry Received!</h1>
         </div>
         <div style="padding: 30px;">
-            <p style="color: rgba(255,255,255,0.8); font-size: 16px;">Thank you for booking with Hogwarts Music Studio!</p>
+            <p style="color: rgba(255,255,255,0.8); font-size: 16px;">Thank you for your interest in Hogwarts Music Studio!</p>
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px;">We have received your enquiry and our team will review it shortly. You will receive a confirmation email once your booking is approved.</p>
             
             <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin: 20px 0;">
-                <h3 style="color: #00d4d4; margin-top: 0;">Booking Details</h3>
+                <h3 style="color: #f97316; margin-top: 0;">Enquiry Details</h3>
                 <p><strong>Service:</strong> {booking['service_name']}</p>
-                <p><strong>Date:</strong> {booking['preferred_date']}</p>
-                <p><strong>Time:</strong> {booking['preferred_time']}</p>
-                {"<p><strong>Hours Booked:</strong> " + str(booking.get('hours', 'N/A')) + " hours</p>" if booking.get('hours') else ""}
-                <p><strong>Booking ID:</strong> {booking['id']}</p>
-                <p><strong>Status:</strong> <span style="color: #fbbf24;">Pending Approval</span></p>
+                <p><strong>Preferred Date:</strong> {booking['preferred_date']}</p>
+                <p><strong>Preferred Time:</strong> {booking['preferred_time']}</p>
+                {"<p><strong>Hours Requested:</strong> " + str(booking.get('hours')) + " hours</p>" if booking.get('hours') else ""}
+                <p><strong>Reference ID:</strong> <span style="color: #00d4d4;">{booking['id']}</span></p>
+                <p><strong>Status:</strong> <span style="color: #fbbf24;">Pending Review</span></p>
             </div>
             
-            <div style="background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); border-radius: 8px; padding: 15px; margin: 20px 0;">
-                <p style="margin: 0; color: #f97316; font-size: 14px;">
-                    <strong>Note:</strong> Your booking is pending admin approval. You'll receive another email once confirmed.
-                    {" If extra hours are needed during the session, additional charges will apply." if booking.get('hours') else ""}
+            <div style="background: rgba(0,212,212,0.1); border: 1px solid rgba(0,212,212,0.3); border-radius: 8px; padding: 15px; margin: 20px 0;">
+                <p style="margin: 0; color: #00d4d4; font-size: 14px;">
+                    <strong>Tip:</strong> Create an account on our website to track your booking status in real-time! (Optional)
                 </p>
             </div>
             
-            <p style="color: rgba(255,255,255,0.6); font-size: 14px;">
-                Track your booking status by creating an account or logging in at our website.
-            </p>
+            {('<div style="background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.3); border-radius: 8px; padding: 15px; margin: 20px 0;"><p style="margin: 0; color: #f97316; font-size: 14px;"><strong>Note:</strong> If extra hours are needed during the live session, additional charges will apply at the same hourly rate.</p></div>' if booking.get('hours') else '')}
         </div>
         <div style="background: rgba(0,0,0,0.3); padding: 20px; text-align: center;">
             <p style="margin: 0; color: rgba(255,255,255,0.5); font-size: 12px;">
@@ -318,28 +317,85 @@ async def send_booking_confirmation(booking: dict):
         </div>
     </div>
     """
-    await send_email(booking['email'], f"Booking Confirmed - {booking['service_name']}", html)
+    await send_email(booking['email'], f"Enquiry Received - {booking['service_name']} | Hogwarts Music Studio", html)
 
 async def send_booking_status_update(booking: dict):
-    status_colors = {"confirmed": "#10b981", "completed": "#00d4d4", "cancelled": "#ef4444"}
-    status_text = {"confirmed": "Approved & Confirmed", "completed": "Completed", "cancelled": "Cancelled"}
-    color = status_colors.get(booking['status'], "#fbbf24")
-    text = status_text.get(booking['status'], booking['status'].title())
+    """Send email when admin updates booking status"""
+    status = booking['status']
     
-    html = f"""
-    <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
-        <h2 style="color: #00d4d4;">Booking Status Update</h2>
-        <p>Your booking for <strong>{booking['service_name']}</strong> has been updated.</p>
-        <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0;">
-            <p><strong>Status:</strong> <span style="color: {color}; font-weight: bold;">{text}</span></p>
-            <p><strong>Date:</strong> {booking['preferred_date']}</p>
-            <p><strong>Time:</strong> {booking['preferred_time']}</p>
-            <p><strong>Booking ID:</strong> {booking['id']}</p>
+    if status == 'confirmed' or status == 'approved':
+        # Booking approved - send confirmation email
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a1a1f 0%, #0d2229 100%); color: white; border-radius: 16px; overflow: hidden;">
+            <div style="background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%); padding: 30px; text-align: center;">
+                <h1 style="margin: 0; color: white; font-size: 28px;">🎉 Booking Confirmed!</h1>
+            </div>
+            <div style="padding: 30px;">
+                <p style="color: rgba(255,255,255,0.9); font-size: 18px;">Great news! Your booking has been approved.</p>
+                
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="color: #10b981; margin-top: 0;">Confirmed Session Details</h3>
+                    <p><strong>Service:</strong> {booking['service_name']}</p>
+                    <p><strong>Date:</strong> {booking['preferred_date']}</p>
+                    <p><strong>Time:</strong> {booking['preferred_time']}</p>
+                    {"<p><strong>Hours Booked:</strong> " + str(booking.get('hours')) + " hours</p>" if booking.get('hours') else ""}
+                    <p><strong>Booking ID:</strong> <span style="color: #00d4d4;">{booking['id']}</span></p>
+                </div>
+                
+                <div style="background: rgba(16,185,129,0.1); border-radius: 8px; padding: 15px; margin: 20px 0;">
+                    <p style="margin: 0; color: #10b981; font-size: 14px;">
+                        ✅ Your session is confirmed! We look forward to working with you.
+                    </p>
+                </div>
+                
+                <p style="color: rgba(255,255,255,0.6); font-size: 14px;">
+                    Login to your account to track more details and manage your bookings.
+                </p>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 20px; text-align: center;">
+                <p style="margin: 0; color: rgba(255,255,255,0.5); font-size: 12px;">
+                    Hogwarts Music Studio | {ADMIN_EMAIL} | {ADMIN_PHONE}
+                </p>
+            </div>
         </div>
-        {"<p style='color: #10b981;'>Your session is confirmed! We look forward to seeing you.</p>" if booking['status'] == 'confirmed' else ""}
-    </div>
-    """
-    await send_email(booking['email'], f"Booking {text} - Hogwarts Music Studio", html)
+        """
+        subject = f"✅ Booking Confirmed - {booking['service_name']} | Hogwarts Music Studio"
+    elif status == 'completed':
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
+            <h2 style="color: #00d4d4;">Thank You! 🎵</h2>
+            <p>Your session for <strong>{booking['service_name']}</strong> has been marked as completed.</p>
+            <p style="color: rgba(255,255,255,0.6);">Thank you for choosing Hogwarts Music Studio. We hope you loved the experience!</p>
+            <p style="color: #fbbf24;">We'd love to work with you again. Book your next session anytime!</p>
+        </div>
+        """
+        subject = f"Session Completed - {booking['service_name']} | Hogwarts Music Studio"
+    elif status == 'rejected' or status == 'cancelled':
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
+            <h2 style="color: #ef4444;">Booking Update</h2>
+            <p>We regret to inform you that your booking for <strong>{booking['service_name']}</strong> could not be confirmed at this time.</p>
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 20px 0;">
+                <p><strong>Requested Date:</strong> {booking['preferred_date']}</p>
+                <p><strong>Requested Time:</strong> {booking['preferred_time']}</p>
+            </div>
+            <p style="color: rgba(255,255,255,0.6);">Please feel free to submit a new enquiry for a different date/time, or contact us directly for assistance.</p>
+            <p>Contact: <a href="mailto:{ADMIN_EMAIL}" style="color: #00d4d4;">{ADMIN_EMAIL}</a></p>
+        </div>
+        """
+        subject = f"Booking Update - {booking['service_name']} | Hogwarts Music Studio"
+    else:
+        # Default/pending
+        html = f"""
+        <div style="font-family: 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; background: #0a1a1f; color: white; border-radius: 16px; padding: 30px;">
+            <h2 style="color: #fbbf24;">Booking Status Update</h2>
+            <p>Your booking for <strong>{booking['service_name']}</strong> has been updated.</p>
+            <p><strong>Status:</strong> {status.title()}</p>
+        </div>
+        """
+        subject = f"Booking Update - Hogwarts Music Studio"
+    
+    await send_email(booking['email'], subject, html)
 
 async def send_admin_notification(booking: dict):
     html = f"""
