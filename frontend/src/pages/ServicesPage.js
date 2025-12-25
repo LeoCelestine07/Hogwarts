@@ -18,10 +18,12 @@ const iconMap = {
 
 const ServicesPage = () => {
   const [services, setServices] = useState([]);
+  const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchServices();
+    fetchContent();
   }, []);
 
   const fetchServices = async () => {
@@ -32,6 +34,15 @@ const ServicesPage = () => {
       console.error('Error fetching services:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchContent = async () => {
+    try {
+      const response = await axios.get(`${API}/settings/content`);
+      setContent(response.data);
+    } catch (error) {
+      console.error('Error fetching content:', error);
     }
   };
 
@@ -54,14 +65,14 @@ const ServicesPage = () => {
             className="text-center"
           >
             <span className="inline-block px-4 py-2 rounded-full glass border border-cyan-500/30 text-xs uppercase tracking-[0.2em] text-cyan-400 mb-6">
-              Our Services
+              {content?.services_page_badge || 'Our Services'}
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6">
-              Professional Audio<br />
-              <span className="text-gradient">Solutions</span>
+              {content?.services_page_title || 'Professional Audio'}<br />
+              <span className="text-gradient">{content?.services_page_title_gradient || 'Solutions'}</span>
             </h1>
             <p className="text-lg text-white/50 max-w-2xl mx-auto">
-              From dubbing to mastering, we offer comprehensive audio post-production services tailored to your creative vision.
+              {content?.services_page_subtitle || 'From dubbing to mastering, we offer comprehensive audio post-production services tailored to your creative vision.'}
             </p>
           </motion.div>
         </div>
@@ -169,17 +180,17 @@ const ServicesPage = () => {
               <Zap className="w-8 h-8 lightning-bolt" />
             </motion.div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Not Sure Which Service You Need?
+              {content?.services_cta_title || 'Not Sure Which Service You Need?'}
             </h2>
             <p className="text-white/50 mb-8">
-              Let's discuss your project and find the perfect solution for your audio needs.
+              {content?.services_cta_subtitle || "Let's discuss your project and find the perfect solution for your audio needs."}
             </p>
             <Link
               to="/booking"
               data-testid="services-contact-cta"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-black font-bold hover:scale-105 transition-transform shadow-[0_0_20px_rgba(0,212,212,0.3)]"
             >
-              Get in Touch
+              {content?.services_cta_button || 'Get in Touch'}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
