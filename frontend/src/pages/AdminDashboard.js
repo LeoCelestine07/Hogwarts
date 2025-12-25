@@ -1841,8 +1841,28 @@ const ContentManagement = () => {
 
         {/* Founder Info */}
         <div className="glass rounded-xl p-6 border border-white/10">
-          <h3 className="font-bold text-lg mb-4 text-orange-400">Founder Info</h3>
+          <h3 className="font-bold text-lg mb-4 text-orange-400">Founder Section</h3>
           <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Section Badge</label>
+              <input
+                type="text"
+                value={content.founder_badge || ''}
+                onChange={(e) => handleInputChange('founder_badge', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="Meet The Founder"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">Section Title</label>
+              <input
+                type="text"
+                value={content.founder_section_title || ''}
+                onChange={(e) => handleInputChange('founder_section_title', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="The Vision Behind Hogwarts"
+              />
+            </div>
             <div>
               <label className="block text-sm text-white/60 mb-2">Founder Name</label>
               <input
@@ -1877,6 +1897,16 @@ const ContentManagement = () => {
                 value={content.founder_imdb_url || ''}
                 onChange={(e) => handleInputChange('founder_imdb_url', e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-white/60 mb-2">IMDB Button Text</label>
+              <input
+                type="text"
+                value={content.founder_imdb_text || ''}
+                onChange={(e) => handleInputChange('founder_imdb_text', e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-cyan-500/50"
+                placeholder="View on IMDb"
               />
             </div>
           </div>
